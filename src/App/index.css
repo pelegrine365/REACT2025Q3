@@ -1,0 +1,28 @@
+.app-container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #cc0000;
+}
+
+.main {
+  flex: 1;
+  padding: 15px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.app-container h1 {
+  font-family: 'Pokemon Solid', sans-serif;
+  color: #ffcc00;
+  letter-spacing: 5px;
+  text-shadow:
+    -2px 5px 0 #2a3a90,
+    2px -2px 0 #2a3a90,
+    -5px 2px 0 #2a3a90,
+    2px 2px 0 #2a3a90;
+}

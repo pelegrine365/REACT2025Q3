@@ -1,24 +1,38 @@
 import { Component } from 'react';
+import { fetchPokemonByName } from '../api/fetchPokemonItemByName';
 
 import SearchBar from '../components/SearchBar';
 import './index.css';
 
+interface ResultItem {
+  name: string;
+  image: string;
+}
+
 interface AppState {
-  inputValue: string;
-  results: [];
+  results: ResultItem[];
 }
 
 class App extends Component<unknown, AppState> {
   constructor(props: unknown) {
     super(props);
     this.state = {
-      inputValue: '',
       results: [],
     };
   }
 
-  handleSearch = (inputValue: string): void => {
-    console.log(inputValue);
+  handleSearch = async (inputValue: string) => {
+    try {
+      const result: ResultItem = await fetchPokemonByName(inputValue);
+      this.setState({
+        results: [result],
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      this.setState({
+        results: [],
+      });
+    }
   };
 
   render() {

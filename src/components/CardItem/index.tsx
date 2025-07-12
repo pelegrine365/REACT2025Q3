@@ -1,15 +1,8 @@
 import { Component } from 'react';
 import './index.css';
+import type { Pokemon } from '../../types';
 
-interface CardItemProps {
-  name: string;
-  id: string;
-  image: string;
-  description: string;
-  types: string[];
-}
-
-class CardItem extends Component<CardItemProps> {
+class CardItem extends Component<Pokemon> {
   render() {
     const { id, name, image, description, types } = this.props;
 

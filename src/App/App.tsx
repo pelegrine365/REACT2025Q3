@@ -4,31 +4,24 @@ import { fetchPokemonByName } from '../api/fetchPokemonItemByName';
 import SearchBar from '../components/SearchBar';
 import CardList from '../components/CardList';
 import './index.css';
-
-interface PokemonData {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  types: string[];
-}
+import type { Pokemon } from '../types';
 
 interface AppState {
-  results: PokemonData[];
+  results: Pokemon[];
 }
 
 class App extends Component<unknown, AppState> {
   constructor(props: unknown) {
     super(props);
     this.state = {
-      results: [] as PokemonData[],
+      results: [] as Pokemon[],
     };
   }
   handleSearch = async (inputValue: string) => {
     console.log('handleSearch', this.state.results);
 
     try {
-      const result: PokemonData = await fetchPokemonByName(inputValue);
+      const result: Pokemon = await fetchPokemonByName(inputValue);
       this.setState({
         results: [result],
       });

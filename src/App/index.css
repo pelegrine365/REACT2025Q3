@@ -7,12 +7,13 @@
 
 .header {
   background-color: #cc0000;
+  border-bottom: 3px solid #000;
 }
 
 .main {
   flex: 1;
   padding: 15px;
-  background-color: #ffffff;
+  background-color: #fff;
   overflow-y: auto;
 }
 

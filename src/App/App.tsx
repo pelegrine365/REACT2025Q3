@@ -3,11 +3,15 @@ import { fetchPokemonByName } from '../api/fetchPokemonItemByName';
 
 import SearchBar from '../components/SearchBar';
 import CardList from '../components/CardList';
-import './index.css';
+import Spinner from '../components/Spinner';
+
 import type { Pokemon } from '../types';
+
+import './index.css';
 
 interface AppState {
   results: Pokemon[];
+  loading: boolean;
 }
 
 class App extends Component<unknown, AppState> {
@@ -15,21 +19,26 @@ class App extends Component<unknown, AppState> {
     super(props);
     this.state = {
       results: [] as Pokemon[],
+      loading: false,
     };
   }
+
   handleSearch = async (inputValue: string) => {
-    console.log('handleSearch', this.state.results);
+    this.setState((prevState) => ({ ...prevState, loading: true }));
 
     try {
       const result: Pokemon = await fetchPokemonByName(inputValue);
+
       this.setState({
         results: [result],
       });
     } catch (error) {
-      console.error('Error:', error);
+      console.log(error);
       this.setState({
         results: [],
       });
+    } finally {
+      this.setState((prevState) => ({ ...prevState, loading: false }));
     }
   };
 
@@ -42,7 +51,10 @@ class App extends Component<unknown, AppState> {
           <SearchBar onSearch={this.handleSearch} />
         </div>
         <div className="main">
-          <CardList results={this.state.results}></CardList>
+          {this.state.loading && <Spinner />}
+          {!this.state.loading && (
+            <CardList results={this.state.results}></CardList>
+          )}
         </div>
       </div>
     );

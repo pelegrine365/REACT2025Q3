@@ -31,7 +31,7 @@ class SearchBar extends Component<SearchBarProps, SearchBarState> {
   };
 
   handleClear = () => {
-    this.setState({ inputValue: '', hasError: false });
+    this.setState({ inputValue: '' });
     this.props.onSearch('');
   };
 

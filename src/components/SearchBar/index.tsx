@@ -6,21 +6,33 @@ interface SearchBarState {
 }
 
 interface SearchBarProps {
+  searchValue: string;
   onSearch: (inputValue: string) => void;
 }
 
 class SearchBar extends Component<SearchBarProps, SearchBarState> {
   constructor(props: SearchBarProps) {
     super(props);
-    this.state = { inputValue: '' };
+    this.state = { inputValue: this.props.searchValue };
   }
+
+  handleClick = () => {
+    this.props.onSearch(this.state.inputValue);
+  };
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ inputValue: e.target.value });
   };
 
-  handleClick = () => {
-    this.props.onSearch(this.state.inputValue);
+  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      this.handleClick();
+    }
+  };
+
+  handleClear = () => {
+    this.setState({ inputValue: '', hasError: false });
+    this.props.onSearch('');
   };
 
   render() {
@@ -29,11 +41,21 @@ class SearchBar extends Component<SearchBarProps, SearchBarState> {
         <div className="search-bar">
           <input
             type="text"
+            name="search-name"
             value={this.state.inputValue}
             onChange={this.handleChange}
             placeholder="Write the request..."
           />
-          <button onClick={this.handleClick}>Search</button>
+          <button onClick={this.handleClick} disabled={!this.state.inputValue}>
+            Search
+          </button>
+          <button
+            className="clear"
+            onClick={this.handleClear}
+            disabled={!this.state.inputValue}
+          >
+            x
+          </button>
         </div>
       </div>
     );

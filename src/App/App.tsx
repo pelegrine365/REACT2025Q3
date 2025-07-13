@@ -6,6 +6,8 @@ import SearchBar from '../components/SearchBar';
 import CardList from '../components/CardList';
 import Spinner from '../components/Spinner';
 import ErrorMessage from '../components/ErrorMessage';
+import ErrorBoundary from '../components/ErrorBoundary';
+import BrokenComponent from '../components/BrokenComponent';
 
 import type { Pokemon } from '../types';
 
@@ -17,6 +19,7 @@ interface AppState {
   initialSearchValue: string;
   hasError: boolean;
   errorMessage: string;
+  showBrokenComponent: boolean;
 }
 
 class App extends Component<unknown, AppState> {
@@ -31,6 +34,7 @@ class App extends Component<unknown, AppState> {
       initialSearchValue: savedSearchValue,
       hasError: false,
       errorMessage: '',
+      showBrokenComponent: false,
     };
   }
 
@@ -110,26 +114,36 @@ class App extends Component<unknown, AppState> {
     }
   };
 
+  showBrokenComponent = () => {
+    this.setState({ showBrokenComponent: true });
+  };
+
   render() {
     return (
-      <div className="app-container">
-        <div className="header">
-          <h1>Pokemons Cards</h1>
-          <SearchBar
-            onSearch={this.handleSearch}
-            searchValue={this.state.initialSearchValue}
-          />
+      <ErrorBoundary>
+        <div className="app-container">
+          <div className="header">
+            <h1>Pokemons Cards</h1>
+            <SearchBar
+              onSearch={this.handleSearch}
+              searchValue={this.state.initialSearchValue}
+            />
+          </div>
+          <div className="main">
+            {this.state.loading && !this.state.hasError && <Spinner />}
+            {!this.state.loading && !this.state.hasError && (
+              <CardList results={this.state.results}></CardList>
+            )}
+            {this.state.hasError && (
+              <ErrorMessage message={this.state.errorMessage} />
+            )}
+            {this.state.showBrokenComponent && <BrokenComponent />}
+          </div>
+          <button className="error-button" onClick={this.showBrokenComponent}>
+            Try error
+          </button>
         </div>
-        <div className="main">
-          {this.state.loading && !this.state.hasError && <Spinner />}
-          {!this.state.loading && !this.state.hasError && (
-            <CardList results={this.state.results}></CardList>
-          )}
-          {this.state.hasError && (
-            <ErrorMessage message={this.state.errorMessage} />
-          )}
-        </div>
-      </div>
+      </ErrorBoundary>
     );
   }
 }

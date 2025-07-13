@@ -1,6 +1,8 @@
 import { Component } from 'react';
-import './index.css';
+
 import type { Pokemon } from '../../types';
+
+import './index.css';
 
 class CardItem extends Component<Pokemon> {
   render() {

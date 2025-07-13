@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { fetchPokemonByName } from '../api/fetchPokemonItemByName';
+import { fetchDefaultPokemonList } from '../api/fetchDefaultPokemonList';
 
 import SearchBar from '../components/SearchBar';
 import CardList from '../components/CardList';
@@ -33,12 +34,35 @@ class App extends Component<unknown, AppState> {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const savedSearchValue = localStorage.getItem('searchValue') ?? '';
 
     if (savedSearchValue) {
       this.setState({ loading: true });
       this.handleSearch(savedSearchValue);
+    } else {
+      try {
+        const pokemons = await fetchDefaultPokemonList(10);
+
+        this.setState({
+          results: pokemons,
+          hasError: false,
+          loading: false,
+        });
+      } catch (error: unknown) {
+        let message = 'Pokemon not found. Try searching with a different name.';
+
+        if (error instanceof Error) {
+          message = error.message;
+        }
+        this.setState({
+          results: [],
+          hasError: true,
+          errorMessage: message,
+        });
+      } finally {
+        this.setState({ loading: false });
+      }
     }
   }
 
@@ -69,17 +93,24 @@ class App extends Component<unknown, AppState> {
       }
     } else {
       localStorage.clear();
-      this.setState(() => ({
+      this.setState({
+        results: [],
         initialSearchValue: inputValue,
         hasError: false,
-      }));
-    }
+        loading: true,
+      });
 
-    console.log({ inputValue });
+      const pokemons = await fetchDefaultPokemonList(10);
+
+      this.setState({
+        results: pokemons,
+        loading: false,
+        hasError: false,
+      });
+    }
   };
 
   render() {
-    console.log('render', this.state.results);
     return (
       <div className="app-container">
         <div className="header">

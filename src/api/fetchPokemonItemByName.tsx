@@ -1,3 +1,5 @@
+import type { Pokemon } from '../types';
+
 interface FlavorTextEntry {
   flavor_text: string;
   language: { name: string; url: string };
@@ -9,7 +11,7 @@ interface PokemonType {
   type: { name: string; url: string };
 }
 
-export async function fetchPokemonByName(name: string) {
+export async function fetchPokemonByName(name: string): Promise<Pokemon> {
   const apiBaseUrl = 'https://pokeapi.co/api/v2';
 
   const pokemonResponse = await fetch(

@@ -5,7 +5,7 @@ import {
   clearSearchValue,
   getSavedSearchValue,
   saveSearchValue,
-} from '../services/appService';
+} from '../api/searchStorage';
 
 import SearchBar from '../components/SearchBar';
 import CardList from '../components/CardList';

@@ -33,8 +33,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   render() {
-    console.log('jkhgkj', this.state);
-
     if (this.state.hasError) {
       return (
         <div className="error-wrapper">

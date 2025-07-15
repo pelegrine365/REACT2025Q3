@@ -1,1 +1,13 @@
-npm run lint
+#!/bin/sh
+
+echo ""; echo "🧪 Running TypeScript check..."
+npm run tsc:dry || { echo "❌ TypeScript check failed"; exit 1; }
+
+echo ""; echo "🎯 Checking code formatting..."
+npm run format:check || { echo "❌ Prettier check failed"; exit 1; }
+
+echo ""; echo "🔧 Running linter..."
+npm run lint || { echo "❌ Linter check failed"; exit 1; }
+
+echo ""; echo "✅ All checks passed"
+exit 0

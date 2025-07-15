@@ -8,8 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "tsc:dry": "tsc --project ./tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "react": "^19.1.0",

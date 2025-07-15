@@ -1,80 +1,74 @@
 .search-bar-container {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  margin: 35px auto;
-  padding: 0 15px;
-  max-width: 1200px;
-  background-color: #cc0000;
+  margin: 2rem auto;
+  max-width: 42rem;
 }
 
 .search-bar {
+  position: relative;
   width: 100%;
 }
 
 .search-bar input {
-  width: 100%;
-  color: #ffffff;
-  padding: 10px 110px 10px 10px;
-  border-radius: 20px;
-  border: 2px solid #fff;
-  background-color: #000;
-  font-size: 16px;
   box-sizing: border-box;
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 1rem 9rem 1rem 1.5rem;
+  color: var(--pokemon-black);
+  background: white;
+  border: 3px solid var(--pokemon-black);
+  border-radius: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .search-bar input:focus {
-  color: #000;
+  border-color: var(--pokemon-blue);
+  box-shadow: 2px 2px 2px var(--pokemon-glow);
   outline: none;
-  border: 2px solid #000;
-  background-color: #fff;
 }
 
 .search-bar input::placeholder {
-  color: #fff;
-  opacity: 1;
-}
-
-.search-bar input::placeholder:focus {
-  color: #000;
-  opacity: 1;
+  color: rgba(248, 250, 252, 0.5);
 }
 
 .search-bar button {
-  width: 100px;
   position: absolute;
-  right: 20px;
-  top: 5px;
-  bottom: 5px;
-  padding: 0 20px;
-  border: none;
-  background-color: #fff;
-  border: 2px solid #000;
-  border-radius: 20px;
-  font-size: 16px;
+  top: 50%;
+  border: 2px solid var(--pokemon-black);
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.5s ease;
+  transition: 0.2s ease;
+}
+
+.search-bar button:not(.clear) {
+  right: 1rem;
+  top: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--pokemon-red);
+  color: white;
+  border: 2px solid var(--pokemon-black);
+  font-weight: bold;
+  box-shadow: 2px 2px 0 var(--pokemon-black);
+}
+
+.search-bar button:not(.clear):hover {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--pokemon-black);
 }
 
 .search-bar .clear {
-  width: 50px;
-  padding: 0;
-  position: absolute;
-  right: 130px;
-  top: 5px;
-  bottom: 5px;
+  right: 7rem;
+  top: 0.8rem;
+  width: 2rem;
+  height: 2rem;
+  background: var(--pokemon-black);
+  color: var(--pokemon-yellow);
+  border: none;
+  font-weight: bold;
+  border-radius: 2rem;
 }
 
-.search-bar button:hover {
-  border-color: #fff;
-  background-color: #000;
-  color: #fff;
-}
-
-.search-bar button:disabled {
-  background-color: #fff;
-  border-color: #000;
-  cursor: not-allowed;
-  transition: none;
-  color: #000;
+.search-bar .clear:hover {
+  background: var(--pokemon-blue);
 }

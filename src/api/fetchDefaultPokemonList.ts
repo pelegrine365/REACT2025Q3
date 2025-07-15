@@ -1,13 +1,11 @@
+import { DEFAULT_POKEMONS_LIMIT } from '../constants';
 import type { Pokemon } from '../types';
+import { getRandomOffset } from '../utils/getRandomOffset';
 import { fetchPokemonByName } from './fetchPokemonItemByName';
 
-const offsetNumber = Math.floor(Math.random() * 30) + 1;
-
-export async function fetchDefaultPokemonList(
-  count: number
-): Promise<Pokemon[]> {
+export async function fetchDefaultPokemonList(): Promise<Pokemon[]> {
   const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?limit=${count}&offset=${offsetNumber}`
+    `https://pokeapi.co/api/v2/pokemon?limit=${DEFAULT_POKEMONS_LIMIT}&offset=${getRandomOffset()}`
   );
 
   if (!response.ok) {

@@ -1,6 +1,11 @@
 import { Component } from 'react';
-import { fetchPokemonByName } from '../api/fetchPokemonItemByName';
-import { fetchDefaultPokemonList } from '../api/fetchDefaultPokemonList';
+
+import { getPokemonsBySearch } from '../services/pokemonService';
+import {
+  clearSearchValue,
+  getSavedSearchValue,
+  saveSearchValue,
+} from '../services/appService';
 
 import SearchBar from '../components/SearchBar';
 import CardList from '../components/CardList';
@@ -39,79 +44,42 @@ class App extends Component<unknown, AppState> {
   }
 
   async componentDidMount() {
-    const savedSearchValue = localStorage.getItem('searchValue') ?? '';
-
-    if (savedSearchValue) {
-      this.setState({ loading: true });
-      this.handleSearch(savedSearchValue);
-    } else {
-      try {
-        const pokemons = await fetchDefaultPokemonList(10);
-
-        this.setState({
-          results: pokemons,
-          hasError: false,
-          loading: false,
-        });
-      } catch (error: unknown) {
-        let message = 'Pokemon not found. Try searching with a different name.';
-
-        if (error instanceof Error) {
-          message = error.message;
-        }
-        this.setState({
-          results: [],
-          hasError: true,
-          errorMessage: message,
-        });
-      } finally {
-        this.setState({ loading: false });
-      }
-    }
+    const savedSearchValue = getSavedSearchValue();
+    this.fetchAndSetPokemons(savedSearchValue);
   }
 
-  handleSearch = async (inputValue: string) => {
+  private fetchAndSetPokemons = async (inputValue: string) => {
+    this.setState({ loading: true, hasError: false });
     if (inputValue) {
-      localStorage.setItem('searchValue', inputValue);
-      this.setState(() => ({ loading: true, hasError: false }));
-
-      try {
-        const result: Pokemon = await fetchPokemonByName(inputValue);
-
-        this.setState({
-          results: [result],
-        });
-      } catch (error: unknown) {
-        let message = 'Pokemon not found. Try searching with a different name.';
-
-        if (error instanceof Error) {
-          message = error.message;
-        }
-        this.setState({
-          results: [],
-          hasError: true,
-          errorMessage: message,
-        });
-      } finally {
-        this.setState({ loading: false });
-      }
+      saveSearchValue(inputValue);
     } else {
-      localStorage.clear();
-      this.setState({
-        results: [],
-        initialSearchValue: inputValue,
-        hasError: false,
-        loading: true,
-      });
-
-      const pokemons = await fetchDefaultPokemonList(10);
-
+      clearSearchValue();
+    }
+    try {
+      const pokemons = await getPokemonsBySearch(inputValue);
       this.setState({
         results: pokemons,
-        loading: false,
         hasError: false,
+        errorMessage: '',
       });
+    } catch (error: unknown) {
+      let message = 'Pokemon not found. Try searching with a different name.';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      this.setState({
+        results: [],
+        hasError: true,
+        errorMessage: message,
+      });
+    } finally {
+      this.setState({ loading: false });
     }
+  };
+
+  handleSearch = async (inputValue: string) => {
+    this.setState({ initialSearchValue: inputValue });
+    this.fetchAndSetPokemons(inputValue);
   };
 
   showBrokenComponent = () => {

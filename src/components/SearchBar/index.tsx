@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import './index.css';
+import { getSavedSearchValue } from '../../api/searchStorage';
 
 interface SearchBarState {
   inputValue: string;
@@ -17,6 +18,10 @@ class SearchBar extends Component<SearchBarProps, SearchBarState> {
   }
 
   handleClick = () => {
+    const savedValue = getSavedSearchValue();
+    if (savedValue === this.state.inputValue) {
+      return;
+    }
     this.props.onSearch(this.state.inputValue);
   };
 
@@ -36,26 +41,26 @@ class SearchBar extends Component<SearchBarProps, SearchBarState> {
   };
 
   render() {
+    const { inputValue } = this.state;
     return (
       <div className="search-bar-container">
         <div className="search-bar">
           <input
             type="text"
             name="search-name"
-            value={this.state.inputValue}
+            value={inputValue}
             onChange={this.handleChange}
+            onKeyDown={this.handleKeyDown}
             placeholder="Write the request..."
           />
-          <button onClick={this.handleClick} disabled={!this.state.inputValue}>
+          <button onClick={this.handleClick} disabled={!inputValue}>
             Search
           </button>
-          <button
-            className="clear"
-            onClick={this.handleClear}
-            disabled={!this.state.inputValue}
-          >
-            x
-          </button>
+          {inputValue && (
+            <button className="clear" onClick={this.handleClear}>
+              ×
+            </button>
+          )}
         </div>
       </div>
     );

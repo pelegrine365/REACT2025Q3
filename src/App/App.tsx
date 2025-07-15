@@ -31,7 +31,7 @@ class App extends Component<unknown, AppState> {
   constructor(props: unknown) {
     super(props);
 
-    const savedSearchValue = localStorage.getItem('searchValue') ?? '';
+    const savedSearchValue = getSavedSearchValue();
 
     this.state = {
       results: [] as Pokemon[],

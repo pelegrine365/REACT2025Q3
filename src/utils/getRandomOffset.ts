@@ -1,6 +1,9 @@
-import { DEFAULT_POKEMONS_LIMIT, MAX_POKEMON_COUNT } from '../constants';
+export function getRandomOffset(
+  totalCount: number,
+  requestCount: number
+): number {
+  const maxOffset = totalCount - requestCount;
+  if (maxOffset <= 0) return 0;
 
-export function getRandomOffset(): number {
-  const maxOffset = MAX_POKEMON_COUNT - DEFAULT_POKEMONS_LIMIT;
   return Math.floor(Math.random() * maxOffset);
 }

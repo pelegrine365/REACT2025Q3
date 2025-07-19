@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import CardList from '../CardList';
 
-
 const mockPokemons = [
   {
     id: 26,
@@ -17,7 +16,8 @@ const mockPokemons = [
     id: 27,
     name: 'nidoqueen',
 
-    image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/31.png',
+    image:
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/31.png',
     description:
       'Its hard scales provide strong protection. It uses its hefty bulk to execute powerful moves.',
     types: ['poison', 'ground'],
@@ -27,7 +27,6 @@ const mockPokemons = [
 describe('CardList', () => {
   it('renders correct number of pokemon cards', () => {
     render(<CardList results={mockPokemons} />);
-
 
     const headings = screen.getAllByRole('heading', { level: 2 });
     expect(headings.length).toBe(2);

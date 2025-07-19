@@ -8,7 +8,11 @@ interface ErrorMessageProps {
 
 export class ErrorMessage extends Component<ErrorMessageProps> {
   render() {
-    return <div className="error-message">{this.props.message}</div>;
+    return (
+      <div className="error-message" role="alert">
+        {this.props.message || 'Opppps, something went wrong!'}
+      </div>
+    );
   }
 }
 

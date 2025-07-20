@@ -9,5 +9,11 @@ npm run format:check || { echo "❌ Prettier check failed"; exit 1; }
 echo ""; echo "🔧 Running linter..."
 npm run lint || { echo "❌ Linter check failed"; exit 1; }
 
+echo ""; echo "🧪 Running tests..."
+npm run test || { echo "❌ Tests failed"; exit 1; }
+
+echo ""; echo "📊 Running test coverage check..."
+npm run test:coverage || { echo "❌ Test coverage check failed"; exit 1; }
+
 echo ""; echo "✅ All checks passed"
 exit 0

@@ -35,7 +35,7 @@ export async function fetchPokemonByName(name: string): Promise<Pokemon> {
         (entry: FlavorTextEntry) => entry.language.name === 'en'
       );
       description = englishEntry
-        ? englishEntry.flavor_text.replace(/[\n\f]/g, '').trim()
+        ? englishEntry.flavor_text.replace(/[\n\f]/g, ' ').trim()
         : '';
     }
   } catch (error) {

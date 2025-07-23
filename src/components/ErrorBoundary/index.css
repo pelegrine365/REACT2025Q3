@@ -1,0 +1,47 @@
+.error-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--pokemon-red);
+  z-index: 9999;
+}
+
+.error-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  border: 3px solid var(--pokemon-black);
+  box-shadow: 2px 2px 10px var(--pokemon-black);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.error-title {
+  color: var(--pokemon-red);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.error-link {
+  display: inline-block;
+  background: var(--pokemon-yellow);
+  color: var(--pokemon-black);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  border: 3px solid var(--pokemon-black);
+  font-weight: bold;
+  box-shadow: 2px 2px 0 var(--pokemon-black);
+  transition: all 0.2s ease;
+}
+
+.error-link:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--pokemon-black);
+}

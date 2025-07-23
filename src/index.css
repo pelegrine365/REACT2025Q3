@@ -1,14 +1,31 @@
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('./assets/fonts/pokemonsolid.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  background-color: var(--pokemon-red);
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  --pokemon-red: #cc0000;
+  --pokemon-blue: #3b4cca;
+  --pokemon-yellow: #ffde00;
+  --pokemon-black: #2a2a2a;
+  --pokemon-glow: rgba(255, 222, 0, 0.2);
+  --red-glow: rgba(204, 0, 0, 0.15);
+  --glass: rgba(255, 255, 255, 0.1);
+  --grid-line: rgba(59, 76, 202, 0.2);
+
   font-weight: 400;
+  font-family: 'Inter', sans-serif;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--pokemon-black);
+  background-color: var(--pokemon-red);
 }

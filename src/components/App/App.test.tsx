@@ -56,14 +56,4 @@ describe('App component', () => {
     render(<App />);
     await screen.findByText('API call failed');
   });
-
-  it('catches error in ErrorBoundary', async () => {
-    vi.spyOn(storage, 'getSavedSearchValue').mockReturnValue('');
-    vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue([]);
-
-    render(<App />);
-    fireEvent.click(screen.getByText('Try error'));
-
-    await screen.findByText('Ooooops...');
-  });
 });

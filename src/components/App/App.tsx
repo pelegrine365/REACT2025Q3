@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import { getPokemonsBySearch } from '../../services/pokemonService';
 import {
@@ -18,102 +18,84 @@ import type { Pokemon } from '../../types';
 
 import './index.css';
 
-interface AppState {
-  results: Pokemon[];
-  loading: boolean;
-  initialSearchValue: string;
-  hasError: boolean;
-  errorMessage: string;
-  showBrokenComponent: boolean;
-}
 
-class App extends Component<unknown, AppState> {
-  constructor(props: unknown) {
-    super(props);
+const App = () => {
+  const [results, setResults] = useState<Pokemon[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [initialSearchValue, setInitialSearchValue] = useState(() => getSavedSearchValue());
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showBrokenComponent, setShowBrokenComponent] = useState(false);
 
-    const savedSearchValue = getSavedSearchValue();
+  const fetchAndSetPokemons = async (inputValue: string) => {
+    setLoading(true);
+    setHasError(false);
 
-    this.state = {
-      results: [] as Pokemon[],
-      loading: false,
-      initialSearchValue: savedSearchValue,
-      hasError: false,
-      errorMessage: '',
-      showBrokenComponent: false,
-    };
-  }
-
-  async componentDidMount() {
-    const savedSearchValue = getSavedSearchValue();
-    this.fetchAndSetPokemons(savedSearchValue);
-  }
-
-  private fetchAndSetPokemons = async (inputValue: string) => {
-    this.setState({ loading: true, hasError: false });
     if (inputValue) {
       saveSearchValue(inputValue);
     } else {
       clearSearchValue();
     }
+
     try {
       const pokemons = await getPokemonsBySearch(inputValue);
-      this.setState({
-        results: pokemons,
-        hasError: false,
-        errorMessage: '',
-      });
+      setResults(pokemons);
+      setHasError(false);
+      setErrorMessage('');
     } catch (error: unknown) {
       let message = 'Pokemon not found. Try searching with a different name.';
       if (error instanceof Error) {
         message = error.message;
       }
-      this.setState({
-        results: [],
-        hasError: true,
-        errorMessage: message,
-      });
+      setResults([]);
+      setHasError(true);
+      setErrorMessage(message);
     } finally {
-      this.setState({ loading: false });
+      setLoading(false);
     }
   };
 
-  handleSearch = async (inputValue: string) => {
-    this.setState({ initialSearchValue: inputValue });
-    this.fetchAndSetPokemons(inputValue);
+  const handleSearch = async (inputValue: string) => {
+    setInitialSearchValue(inputValue);
+    fetchAndSetPokemons(inputValue);
   };
 
-  showBrokenComponent = () => {
-    this.setState({ showBrokenComponent: true });
+  const handleShowBrokenComponent = () => {
+    setShowBrokenComponent(true);
   };
 
-  render() {
-    return (
-      <ErrorBoundary>
-        <div className="app-container">
-          <div className="header">
-            <h1>Pokemons Cards</h1>
-            <SearchBar
-              onSearch={this.handleSearch}
-              searchValue={this.state.initialSearchValue}
-            />
-          </div>
-          <div className="main">
-            {this.state.loading && !this.state.hasError && <Spinner />}
-            {!this.state.loading && !this.state.hasError && (
-              <CardList results={this.state.results}></CardList>
-            )}
-            {this.state.hasError && (
-              <ErrorMessage message={this.state.errorMessage} />
-            )}
-            {this.state.showBrokenComponent && <BrokenComponent />}
-          </div>
-          <button className="error-button" onClick={this.showBrokenComponent}>
-            Try error
-          </button>
+  useEffect(() => {
+    const savedSearchValue = getSavedSearchValue();
+    fetchAndSetPokemons(savedSearchValue);
+  }, []);
+
+  return (
+    <ErrorBoundary>
+      <div className="app-container">
+        <div className="header">
+          <h1>Pokemons Cards</h1>
+          <SearchBar
+            onSearch={handleSearch}
+            searchValue={initialSearchValue}
+          />
         </div>
-      </ErrorBoundary>
-    );
-  }
-}
+        <div className="main">
+          {loading && !hasError && <Spinner />}
+          {!loading && !hasError && (
+            <CardList results={results} />
+          )}
+          {hasError && (
+            <ErrorMessage message={errorMessage} />
+          )}
+          {showBrokenComponent && <BrokenComponent />}
+        </div>
+        <button className="error-button" onClick={handleShowBrokenComponent}>
+          Try error
+        </button>
+      </div>
+    </ErrorBoundary>
+  );
+};
+
 
 export default App;

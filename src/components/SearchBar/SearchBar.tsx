@@ -1,70 +1,61 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import './index.css';
 import { getSavedSearchValue } from '../../api/searchStorage';
-
-interface SearchBarState {
-  inputValue: string;
-}
 
 interface SearchBarProps {
   searchValue: string;
   onSearch: (inputValue: string) => void;
 }
 
-class SearchBar extends Component<SearchBarProps, SearchBarState> {
-  constructor(props: SearchBarProps) {
-    super(props);
-    this.state = { inputValue: this.props.searchValue };
-  }
+const SearchBar = ({ searchValue, onSearch }: SearchBarProps) => {
+  const [inputValue, setInputValue] = useState(searchValue);
 
-  handleClick = () => {
+  const handleClick = () => {
     const savedValue = getSavedSearchValue();
-    if (savedValue === this.state.inputValue) {
+    if (savedValue === inputValue) {
       return;
     }
-    this.props.onSearch(this.state.inputValue);
+
+    onSearch(inputValue);
   };
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
-  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      this.handleClick();
+      handleClick();
     }
   };
 
-  handleClear = () => {
-    this.setState({ inputValue: '' });
-    this.props.onSearch('');
+  const handleClear = () => {
+    setInputValue('');
+    onSearch('');
   };
 
-  render() {
-    const { inputValue } = this.state;
-    return (
-      <div className="search-bar-container">
-        <div className="search-bar">
-          <input
-            type="text"
-            name="search-name"
-            value={inputValue}
-            onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
-            placeholder="Write the request..."
-          />
-          <button onClick={this.handleClick} disabled={!inputValue}>
-            Search
+  return (
+    <div className="search-bar-container">
+      <div className="search-bar">
+        <input
+          type="text"
+          name="search-name"
+          value={inputValue}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Write the request..."
+        />
+        <button onClick={handleClick} disabled={!inputValue}>
+          Search
+        </button>
+        {inputValue && (
+          <button className="clear" onClick={handleClear}>
+            ×
           </button>
-          {inputValue && (
-            <button className="clear" onClick={this.handleClear}>
-              ×
-            </button>
-          )}
-        </div>
+        )}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default SearchBar;

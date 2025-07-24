@@ -13,7 +13,9 @@ describe('SearchBar component', () => {
   it('renders input and search button', () => {
     render(<SearchBar searchValue="" onSearch={mockOnSearch} />);
 
-    expect(screen.getByPlaceholderText('Write the request...')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Write the request...')
+    ).toBeInTheDocument();
     expect(screen.getByText('Search')).toBeInTheDocument();
   });
 

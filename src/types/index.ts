@@ -5,3 +5,9 @@ export interface Pokemon {
   description: string;
   types: string[];
 }
+
+export interface GithubUser {
+  name: string;
+  avatarURL: string;
+  userURL: string;
+}

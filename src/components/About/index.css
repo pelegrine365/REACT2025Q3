@@ -1,0 +1,156 @@
+.about {
+  min-height: calc(100vh - 200px);
+  padding: 2rem 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.about__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.about__header h1 {
+  font-family: 'Pokemon Solid', sans-serif;
+  color: var(--pokemon-yellow);
+  font-size: 3rem;
+  letter-spacing: 3px;
+  margin: 0;
+}
+
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.about__section {
+  background: #ffffff;
+  padding: 2rem;
+  border: 2px solid var(--pokemon-black);
+  border-radius: 0.75rem;
+  box-shadow: 4px 4px 0 var(--pokemon-black);
+}
+
+.about__section h2 {
+  color: var(--pokemon-red);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--pokemon-red);
+  padding-bottom: 0.5rem;
+}
+
+.about__section p {
+  color: var(--pokemon-black);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.about__author,
+.about__course {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about__author-description {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.about__avatar {
+  width: 2rem;
+  border-radius: 50%;
+  padding: 0.3rem;
+}
+
+.about__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--pokemon-black);
+  border-radius: 2rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: 2px 2px 0 var(--pokemon-black);
+  width: fit-content;
+}
+
+.about__link--github {
+  background: var(--pokemon-blue);
+  color: white;
+}
+
+.about__link--course {
+  background: var(--pokemon-yellow);
+  color: var(--pokemon-black);
+}
+
+.about__link:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--pokemon-black);
+}
+
+.about__tech-list,
+.about__features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.about__tech-list li {
+  background: rgba(59, 76, 202, 0.1);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--pokemon-blue);
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: var(--pokemon-blue);
+  text-align: center;
+}
+
+.about__features-list li {
+  background: rgba(255, 222, 0, 0.1);
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 222, 0, 0.5);
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: var(--pokemon-black);
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 1rem 0.5rem;
+  }
+
+  .about__header h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .about__section {
+    padding: 1.5rem;
+  }
+
+  .about__tech-list,
+  .about__features-list {
+    grid-template-columns: 1fr;
+  }
+
+  .about__author,
+  .about__course {
+    align-items: flex-start;
+  }
+}

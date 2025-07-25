@@ -1,0 +1,106 @@
+import { AUTHOR_GITHUB_NAME } from '../../constants';
+import { useGithubUser } from '../../hooks/useGithubAvatar';
+import Spinner from '../Spinner';
+
+import './index.css';
+
+const About = () => {
+  const { avatarURL, userURL, loading, error } =
+    useGithubUser(AUTHOR_GITHUB_NAME);
+  return (
+    <div className="about">
+      <div className="about__container">
+        <div className="about__header">
+          <h1>About Pokemon Cards App</h1>
+        </div>
+
+        <div className="about__content">
+          <div className="about__section">
+            <h2>Application Information</h2>
+            <p>
+              This Pokemon Cards application is a modern React application built
+              with TypeScript that allows users to search and explore Pokemon
+              data using the PokeAPI. The app features a responsive design with
+              Pokemon-themed styling and provides detailed information about
+              each Pokemon.
+            </p>
+          </div>
+
+          {loading || error ? (
+            <Spinner />
+          ) : (
+            <>
+              <div className="about__section">
+                <h2>Author</h2>
+                <div className="about__author">
+                  <p className="about__author-description">
+                    <span>Created by:</span>
+                    <img
+                      className="about__avatar"
+                      src={avatarURL}
+                      alt="avatar"
+                    />
+                    <strong>{AUTHOR_GITHUB_NAME}</strong>
+                  </p>
+
+                  <a
+                    href={userURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="about__link about__link--github"
+                  >
+                    View GitHub Profile
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className="about__section">
+            <h2>Education</h2>
+            <div className="about__course">
+              <p>
+                This project was developed as part of the RS School React course
+                - a comprehensive program for learning modern React development.
+              </p>
+              <a
+                href="https://rs.school/courses/reactjs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="about__link about__link--course"
+              >
+                RS School React Course
+              </a>
+            </div>
+          </div>
+
+          <div className="about__section">
+            <h2>Technologies Used</h2>
+            <ul className="about__tech-list">
+              <li>React 19</li>
+              <li>TypeScript</li>
+              <li>Vite</li>
+              <li>React Router</li>
+              <li>Vitest & Testing Library</li>
+              <li>PokeAPI</li>
+            </ul>
+          </div>
+
+          <div className="about__section">
+            <h2>Features</h2>
+            <ul className="about__features-list">
+              <li>Search Pokemon by name</li>
+              <li>Responsive design</li>
+              <li>Pokemon-themed styling</li>
+              <li>Detailed Pokemon information</li>
+              <li>Fast and modern interface</li>
+              <li>Comprehensive test coverage</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default About;

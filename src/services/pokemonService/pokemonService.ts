@@ -3,7 +3,7 @@ import { fetchDefaultPokemonList } from '@api/fetchDefaultPokemonList';
 import type { Pokemon } from '@types';
 
 export async function getPokemonsBySearch(
-  inputValue: string | null
+  inputValue: string
 ): Promise<Pokemon[]> {
   if (inputValue) {
     const pokemon = await fetchPokemonByName(inputValue);

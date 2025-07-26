@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
 
 import { getPokemonsBySearch } from '@services/pokemonService';
-import {
-  getSearchQuery,
-  setSearchQuery,
-  removeSearchQuery,
-} from '@api/searchQueryApi';
 
 import SearchBar from '@components/SearchBar';
 import CardList from '@components/CardList';
 import Spinner from '@components/Spinner';
 import ErrorMessage from '@components/ErrorMessage';
 import ErrorBoundary from '@components/ErrorBoundary';
+
+import { useSearchQuery } from '@hooks/useSearchQuery';
 
 import type { Pokemon } from '@types';
 
@@ -20,27 +17,17 @@ import './index.css';
 const App = () => {
   const [results, setResults] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(false);
-  const [initialSearchValue, setInitialSearchValue] = useState(
-    () => getSearchQuery() || ''
-  );
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const { searchQuery, updateSearchQuery } = useSearchQuery();
 
-  const fetchAndSetPokemons = async (inputValue: string | null) => {
+  const fetchAndSetPokemons = async (inputValue: string) => {
     setLoading(true);
     setHasError(false);
-
-    if (inputValue) {
-      setSearchQuery(inputValue);
-    } else {
-      removeSearchQuery();
-    }
 
     try {
       const pokemons = await getPokemonsBySearch(inputValue);
       setResults(pokemons);
-      setHasError(false);
-      setErrorMessage('');
     } catch (error: unknown) {
       let message = 'Pokemon not found. Try searching with a different name.';
       if (error instanceof Error) {
@@ -55,21 +42,19 @@ const App = () => {
   };
 
   const handleSearch = async (inputValue: string) => {
-    setInitialSearchValue(inputValue);
-    fetchAndSetPokemons(inputValue);
+    updateSearchQuery(inputValue);
   };
 
   useEffect(() => {
-    const savedSearchValue = getSearchQuery();
-    fetchAndSetPokemons(savedSearchValue);
-  }, []);
+    fetchAndSetPokemons(searchQuery);
+  }, [searchQuery]);
 
   return (
     <ErrorBoundary>
       <div className="app-container">
         <div className="header">
           <h1>Pokemons Cards</h1>
-          <SearchBar onSearch={handleSearch} searchValue={initialSearchValue} />
+          <SearchBar onSearch={handleSearch} searchValue={searchQuery} />
         </div>
         <div className="main">
           {loading && !hasError && <Spinner />}

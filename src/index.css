@@ -10,10 +10,13 @@ body {
   padding: 0;
   box-sizing: border-box;
   position: relative;
-  background-color: var(--pokemon-red);
+  background-color: var(--pokemon-white);
 }
 
 :root {
+  --pokemon-white: #ffffff;
+  --pokemon-beige: #f5f5dc;
+  --pokemon-beige-transparent: rgba(250, 248, 240, 0.95);
   --pokemon-red: #cc0000;
   --pokemon-blue: #3b4cca;
   --pokemon-yellow: #ffde00;
@@ -22,6 +25,8 @@ body {
   --red-glow: rgba(204, 0, 0, 0.15);
   --glass: rgba(255, 255, 255, 0.1);
   --grid-line: rgba(59, 76, 202, 0.2);
+  --dark-surface: #2a2a2a;
+  --neon-blue: #4dd0e1;
 
   font-weight: 400;
   font-family: 'Inter', sans-serif;

@@ -3,10 +3,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AUTHOR_GITHUB_NAME } from '@constants';
 import { useGithubUser } from '@hooks/useGithubUser';
 
-import About from './About';
+import AboutPage from './AboutPage';
 
 vi.mock('@hooks/useGithubUser');
-describe('About', () => {
+describe('AboutPage', () => {
   const mockUseGithubUser = vi.mocked(useGithubUser);
 
   const MOCK_AVATAR_URL = 'https://test.com/avatar';
@@ -15,7 +15,7 @@ describe('About', () => {
     'https://avatars.githubusercontent.com/u/pelegrine365';
   const MOCK_AUTHOR_USER_URL = 'https://github.com/pelegrine365';
 
-  const renderAbout = (
+  const renderAboutPage = (
     mockData: Partial<ReturnType<typeof useGithubUser>> = {}
   ) => {
     const defaultMockData = {
@@ -27,7 +27,7 @@ describe('About', () => {
     };
 
     mockUseGithubUser.mockReturnValue(defaultMockData);
-    return render(<About />);
+    return render(<AboutPage />);
   };
 
   beforeEach(() => {
@@ -35,13 +35,13 @@ describe('About', () => {
   });
 
   it('should render app description and main heading', () => {
-    renderAbout({
+    renderAboutPage({
       avatarURL: MOCK_AUTHOR_AVATAR_URL,
       userURL: MOCK_AUTHOR_USER_URL,
     });
 
     expect(
-      screen.getByRole('heading', { name: /about pokemon cards app/i })
+      screen.getByRole('heading', { name: /about pokemon cards/i })
     ).toBeInTheDocument();
     expect(
       screen.getByText(
@@ -52,7 +52,7 @@ describe('About', () => {
   });
 
   it('should show Spinner when loading', () => {
-    renderAbout({
+    renderAboutPage({
       avatarURL: '',
       userURL: '',
       loading: true,
@@ -63,7 +63,7 @@ describe('About', () => {
   });
 
   it('should show Spinner when there is an error', () => {
-    renderAbout({
+    renderAboutPage({
       avatarURL: '',
       userURL: '',
       error: 'API Error',
@@ -74,7 +74,7 @@ describe('About', () => {
   });
 
   it('should display author info with avatar and github link when data is loaded', () => {
-    renderAbout({
+    renderAboutPage({
       avatarURL: MOCK_AUTHOR_AVATAR_URL,
       userURL: MOCK_AUTHOR_USER_URL,
     });
@@ -96,7 +96,7 @@ describe('About', () => {
   });
 
   it('should render education section with RS School link', () => {
-    renderAbout();
+    renderAboutPage();
 
     expect(
       screen.getByRole('heading', { name: /education/i })
@@ -119,7 +119,7 @@ describe('About', () => {
   });
 
   it('should render technologies section with all tech items', () => {
-    renderAbout();
+    renderAboutPage();
 
     expect(
       screen.getByRole('heading', { name: /technologies used/i })
@@ -134,7 +134,7 @@ describe('About', () => {
   });
 
   it('should render features section with all feature items', () => {
-    renderAbout();
+    renderAboutPage();
 
     expect(
       screen.getByRole('heading', { name: /features/i })
@@ -151,18 +151,18 @@ describe('About', () => {
   });
 
   it('calls useGithubUser hook with correct author name', () => {
-    renderAbout();
+    renderAboutPage();
 
     expect(mockUseGithubUser).toHaveBeenCalledWith(AUTHOR_GITHUB_NAME);
     expect(mockUseGithubUser).toHaveBeenCalledTimes(1);
   });
 
   it('has correct CSS classes and structure', () => {
-    renderAbout();
+    renderAboutPage();
 
-    expect(document.querySelector('.about')).toBeInTheDocument();
+    expect(document.querySelector('.about-page')).toBeInTheDocument();
     expect(document.querySelector('.about__container')).toBeInTheDocument();
-    expect(document.querySelector('.about__header')).toBeInTheDocument();
+    expect(document.querySelector('.header')).toBeInTheDocument();
     expect(document.querySelector('.about__content')).toBeInTheDocument();
   });
 });

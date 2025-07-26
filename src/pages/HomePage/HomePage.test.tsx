@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
-import App from './App';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import HomePage from './HomePage';
 import * as storage from '@api/searchQueryApi';
 import * as service from '@services/pokemonService';
 import { mockPokemonList } from '@mocks/pokemon';
@@ -18,7 +17,7 @@ vi.mock('@components/CardList', () => ({
   ),
 }));
 
-describe('App component', () => {
+describe('HomePage component', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
     vi.stubGlobal('fetch', vi.fn());
@@ -28,11 +27,7 @@ describe('App component', () => {
     vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
     vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
 
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
+    render(<HomePage />);
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('pikachu')).toBeInTheDocument();
@@ -44,11 +39,7 @@ describe('App component', () => {
     const clearSpy = vi.spyOn(storage, 'removeSearchQuery');
     vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
 
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
+    render(<HomePage />);
 
     const input = screen.getByPlaceholderText('Write the request...');
     fireEvent.change(input, { target: { value: '' } });
@@ -65,11 +56,7 @@ describe('App component', () => {
       new Error('API call failed')
     );
 
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
+    render(<HomePage />);
 
     await waitFor(() => {
       expect(screen.getByText('API call failed')).toBeInTheDocument();

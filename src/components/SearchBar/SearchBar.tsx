@@ -36,23 +36,21 @@ const SearchBar = ({ searchValue, onSearch }: SearchBarProps) => {
   };
 
   return (
-    <div className="search-bar-container">
-      <div className="search-bar">
-        <input
-          type="text"
-          name="search-name"
-          value={inputValue}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Write the request..."
-        />
-        <button onClick={handleClick}>Search</button>
-        {inputValue && (
-          <button className="clear" onClick={handleClear}>
-            ×
-          </button>
-        )}
-      </div>
+    <div className="search-bar">
+      <input
+        type="text"
+        name="search-name"
+        value={inputValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Write the request..."
+      />
+      <button onClick={handleClick}>Search</button>
+      {inputValue && (
+        <button className="clear" onClick={handleClear}>
+          ×
+        </button>
+      )}
     </div>
   );
 };

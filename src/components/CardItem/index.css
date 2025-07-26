@@ -37,6 +37,7 @@
 
 .card-name {
   flex: auto;
+  text-align: center;
   align-content: center;
   margin-top: 0.5rem;
 }

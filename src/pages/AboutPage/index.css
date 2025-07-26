@@ -1,26 +1,65 @@
-.about {
-  min-height: calc(100vh - 200px);
-  padding: 2rem 1rem;
-  background-color: rgba(255, 255, 255, 0.9);
+.about-page {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  flex: 1;
+  min-height: 100%;
+}
+
+.header {
+  background-color: var(--pokemon-beige);
+  box-sizing: border-box;
+  border-bottom: none;
+  padding: 2rem 0 1rem 0;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-page h1 {
+  font-family: 'Pokemon Solid', sans-serif;
+  color: var(--pokemon-yellow);
+  font-size: 3.5rem;
+  letter-spacing: 5px;
+  margin: 0;
+  text-shadow:
+    -4px -4px 0 var(--pokemon-black),
+    4px -4px 0 var(--pokemon-black),
+    -4px 4px 0 var(--pokemon-black),
+    4px 4px 0 var(--pokemon-black),
+    8px 8px 0 var(--pokemon-blue),
+    0 0 20px var(--pokemon-glow);
+  position: relative;
+  z-index: 1;
+}
+
+.main {
+  flex: 1;
+  padding: 1rem 1rem 2rem 1rem;
+  border-top: none;
+  border-radius: 20px 20px 0 0;
+  min-height: calc(100vh - 300px);
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.main::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  height: 60px;
+  background: linear-gradient(to top, var(--pokemon-red), transparent);
+  margin: 2rem -1rem -2rem -1rem;
+  pointer-events: none;
 }
 
 .about__container {
   max-width: 800px;
   margin: 0 auto;
-}
-
-.about__header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.about__header h1 {
-  font-family: 'Pokemon Solid', sans-serif;
-  color: var(--pokemon-yellow);
-  font-size: 3rem;
-  letter-spacing: 3px;
-  margin: 0;
-  text-shadow: (--shadow-black);
 }
 
 .about__content {
@@ -30,11 +69,10 @@
 }
 
 .about__section {
-  background: white;
+  background: var(--pokemon-beige);
   padding: 2rem;
   border: 2px solid var(--pokemon-black);
   border-radius: 0.75rem;
-  box-shadow: 4px 4px 0 var(--pokemon-black);
 }
 
 .about__section h2 {
@@ -60,6 +98,19 @@
   gap: 1rem;
 }
 
+.about__author-description {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.about__avatar {
+  width: 2rem;
+  border-radius: 50%;
+  padding: 0.3rem;
+}
+
 .about__link {
   display: inline-flex;
   align-items: center;
@@ -76,7 +127,7 @@
 
 .about__link--github {
   background: var(--pokemon-blue);
-  color: #ffffff;
+  color: white;
 }
 
 .about__link--course {
@@ -116,6 +167,17 @@
   border-radius: 0.5rem;
   font-weight: bold;
   color: var(--pokemon-black);
+}
+
+@media (max-width: 640px) {
+  .about-page h1 {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+
+  .header {
+    height: 120px;
+  }
 }
 
 @media (max-width: 768px) {

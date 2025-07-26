@@ -1,5 +1,5 @@
 import { AUTHOR_GITHUB_NAME } from '../../constants';
-import { useGithubUser } from '../../hooks/useGithubAvatar';
+import { useGithubUser } from '../../hooks/useGithubUser';
 import Spinner from '../Spinner';
 
 import './index.css';
@@ -48,6 +48,8 @@ const About = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="about__link about__link--github"
+                    role="link"
+                    aria-label="View GitHub Profile"
                   >
                     View GitHub Profile
                   </a>
@@ -68,6 +70,8 @@ const About = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="about__link about__link--course"
+                role="link"
+                aria-label="Open RS School React course page"
               >
                 RS School React Course
               </a>

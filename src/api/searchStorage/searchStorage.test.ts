@@ -3,8 +3,8 @@ import {
   getSavedSearchValue,
   saveSearchValue,
   clearSearchValue,
-} from './searchStorage';
-import { SEARCH_VALUE_KEY } from '../constants';
+} from '@api/searchStorage';
+import { SEARCH_VALUE_KEY } from '@constants';
 
 describe('searchStorage', () => {
   afterEach(() => {

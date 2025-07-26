@@ -1,4 +1,4 @@
-import { SEARCH_VALUE_KEY } from '../constants';
+import { SEARCH_VALUE_KEY } from '@constants';
 
 export function getSavedSearchValue(): string {
   return localStorage.getItem(SEARCH_VALUE_KEY) ?? '';

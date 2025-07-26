@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { fetchPokemonByName } from './fetchPokemonItemByName';
+import { fetchPokemonByName } from './fetchPokemonByName';
 import {
   mockSpeciesResponse,
   mockPokemonResponse,
   mockFailedPokemonResponse,
   mockFailedSpeciesResponse,
   mockSpeciesResponseWithoutEnglish,
-} from '../__tests__/mocks/pokemon';
+} from '@mocks/pokemon';
 
 let mockFetch: ReturnType<typeof vi.mocked<typeof fetch>>;
 

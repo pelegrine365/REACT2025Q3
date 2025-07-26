@@ -1,5 +1,5 @@
-import type { Pokemon } from '../../types';
-import CardItem from '../CardItem';
+import type { Pokemon } from '@types';
+import CardItem from '@components/CardItem';
 
 import './index.css';
 

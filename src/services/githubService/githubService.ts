@@ -1,5 +1,5 @@
-import { fetchGithubUser } from '../api/fetchGithubUser';
-import type { GithubUser } from '../types';
+import { fetchGithubUser } from '@api/fetchGithubUser';
+import type { GithubUser } from '@types';
 
 export async function getGithubUser(name: string): Promise<GithubUser> {
   const data = await fetchGithubUser(name);

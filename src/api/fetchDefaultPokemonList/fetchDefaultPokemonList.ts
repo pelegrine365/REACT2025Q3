@@ -1,7 +1,7 @@
-import { POKEMON_TOTAL_COUNT, POKEMONS_PER_REQUEST } from '../constants';
-import type { Pokemon } from '../types';
-import { getRandomOffset } from '../utils/getRandomOffset';
-import { fetchPokemonByName } from './fetchPokemonItemByName';
+import { POKEMON_TOTAL_COUNT, POKEMONS_PER_REQUEST } from '@constants';
+import { fetchPokemonByName } from '@api/fetchPokemonByName';
+import { getRandomOffset } from '@utils/getRandomOffset';
+import type { Pokemon } from '@types';
 
 export async function fetchDefaultPokemonList(): Promise<Pokemon[]> {
   const response = await fetch(

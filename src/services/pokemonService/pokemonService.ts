@@ -1,6 +1,6 @@
-import { fetchPokemonByName } from '../api/fetchPokemonItemByName';
-import { fetchDefaultPokemonList } from '../api/fetchDefaultPokemonList';
-import type { Pokemon } from '../types';
+import { fetchPokemonByName } from '@api/fetchPokemonByName';
+import { fetchDefaultPokemonList } from '@api/fetchDefaultPokemonList';
+import type { Pokemon } from '@types';
 
 export async function getPokemonsBySearch(
   inputValue: string

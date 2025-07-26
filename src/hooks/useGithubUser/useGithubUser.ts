@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getGithubUser } from '../services/githubService';
-import type { GithubUser } from '../types';
+import { getGithubUser } from '@services/githubService/githubService';
+import type { GithubUser } from '@types';
 
 export const useGithubUser = (userName: string) => {
   const [avatarURL, setAvatarURL] = useState('');

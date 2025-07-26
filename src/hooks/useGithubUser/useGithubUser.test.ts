@@ -1,20 +1,24 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useGithubUser } from './useGithubUser';
-import * as githubService from '../services/githubService';
-import type { GithubUser } from '../types';
+import { getGithubUser } from '@services/githubService/githubService';
+import { useGithubUser } from '@hooks/useGithubUser';
+import type { GithubUser } from '@types';
 
-vi.mock('../services/githubService');
+vi.mock('@services/githubService/githubService', () => ({
+  getGithubUser: vi.fn(),
+}));
+
+const mockGetGithubUser = vi.mocked(getGithubUser);
 
 describe('useGithubUser', () => {
   const mockGithubUser: GithubUser = {
     name: 'Test User',
-    avatarURL: 'https://github.com/pelegrine365`',
+    avatarURL: 'https://github.com/pelegrine365',
     userURL: 'https://github.com/pelegrine365',
   };
 
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return initial loading state', () => {
@@ -27,17 +31,15 @@ describe('useGithubUser', () => {
   });
 
   it('should not fetch data when userName is empty', async () => {
-    const getGithubUserSpy = vi.spyOn(githubService, 'getGithubUser');
-
     renderHook(() => useGithubUser(''));
 
     await waitFor(() => {
-      expect(getGithubUserSpy).not.toHaveBeenCalled();
+      expect(mockGetGithubUser).not.toHaveBeenCalled();
     });
   });
 
   it('should fetch and return user data successfully', async () => {
-    vi.spyOn(githubService, 'getGithubUser').mockResolvedValue(mockGithubUser);
+    mockGetGithubUser.mockResolvedValue(mockGithubUser);
 
     const { result } = renderHook(() => useGithubUser('testuser'));
 
@@ -47,16 +49,15 @@ describe('useGithubUser', () => {
       expect(result.current.loading).toBe(false);
     });
 
+    expect(mockGetGithubUser).toHaveBeenCalledWith('testuser');
     expect(result.current.avatarURL).toBe(mockGithubUser.avatarURL);
     expect(result.current.userURL).toBe(mockGithubUser.userURL);
     expect(result.current.error).toBe(null);
   });
 
   it('should handle error when fetch fails', async () => {
-    const errorMessage = 'User not found';
-    vi.spyOn(githubService, 'getGithubUser').mockRejectedValue(
-      new Error(errorMessage)
-    );
+    const errorMessage = 'Failed to fetch github user';
+    mockGetGithubUser.mockRejectedValue(new Error(errorMessage));
 
     const { result } = renderHook(() => useGithubUser('user_not_found'));
 
@@ -72,7 +73,7 @@ describe('useGithubUser', () => {
   });
 
   it('should reset error state when new fetch starts', async () => {
-    vi.spyOn(githubService, 'getGithubUser')
+    mockGetGithubUser
       .mockRejectedValueOnce(new Error('First error'))
       .mockResolvedValueOnce(mockGithubUser);
 
@@ -80,6 +81,7 @@ describe('useGithubUser', () => {
       ({ userName }) => useGithubUser(userName),
       { initialProps: { userName: 'erroruser' } }
     );
+
     await waitFor(() => {
       expect(result.current.error).toBe('First error');
     });

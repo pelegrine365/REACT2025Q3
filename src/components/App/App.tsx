@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 
-import { getPokemonsBySearch } from '../../services/pokemonService';
+import { getPokemonsBySearch } from '@services/pokemonService';
 import {
   clearSearchValue,
   getSavedSearchValue,
   saveSearchValue,
-} from '../../api/searchStorage';
+} from '@api/searchStorage';
 
-import SearchBar from '../SearchBar/SearchBar';
-import CardList from '../CardList/CardList';
-import Spinner from '../Spinner/Spinner';
-import ErrorMessage from '../ErrorMessage';
-import ErrorBoundary from '../ErrorBoundary';
+import SearchBar from '@components/SearchBar';
+import CardList from '@components/CardList';
+import Spinner from '@components/Spinner';
+import ErrorMessage from '@components/ErrorMessage';
+import ErrorBoundary from '@components/ErrorBoundary';
 
-import type { Pokemon } from '../../types';
+import type { Pokemon } from '@types';
 
 import './index.css';
 

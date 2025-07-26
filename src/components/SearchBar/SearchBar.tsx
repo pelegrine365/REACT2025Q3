@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { getSavedSearchValue } from '@api/searchStorage';
+
 import './index.css';
-import { getSavedSearchValue } from '../../api/searchStorage';
 
 interface SearchBarProps {
   searchValue: string;
@@ -45,9 +46,7 @@ const SearchBar = ({ searchValue, onSearch }: SearchBarProps) => {
           onKeyDown={handleKeyDown}
           placeholder="Write the request..."
         />
-        <button onClick={handleClick} disabled={!inputValue}>
-          Search
-        </button>
+        <button onClick={handleClick}>Search</button>
         {inputValue && (
           <button className="clear" onClick={handleClear}>
             ×

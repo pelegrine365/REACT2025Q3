@@ -6,7 +6,19 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@types/*": ["types/*"],
+      "@types": ["types/index"],
+      "@api/*": ["api/*"],
+      "@constants": ["constants/index"],
+      "@constants/*": ["constants/*"],
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"],
+      "@mocks/*": ["__tests__/mocks/*"]
+    },
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -14,7 +26,6 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { fetchDefaultPokemonList } from './fetchDefaultPokemonList';
-import * as fetchByName from './fetchPokemonItemByName';
-import { POKEMONS_PER_REQUEST } from '../constants';
-import * as getOffsetUtil from '../utils/getRandomOffset';
-import { mockPokemonList } from '../__tests__/mocks/pokemon';
-import type { Pokemon } from '../types';
+import { fetchDefaultPokemonList } from '@api/fetchDefaultPokemonList';
+import * as fetchByName from '@api/fetchPokemonByName';
+import * as getOffsetUtil from '@utils/getRandomOffset';
+import { POKEMONS_PER_REQUEST } from '@constants';
+import { mockPokemonList } from '@mocks/pokemon';
+import type { Pokemon } from '@types';
 
 const createMockResponse = (responseInit: Partial<Response>): Response => {
   return {

@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AUTHOR_GITHUB_NAME } from '../../constants';
-import * as useGithubUserHook from '../../hooks/useGithubUser';
+import { AUTHOR_GITHUB_NAME } from '@constants';
+import { useGithubUser } from '@hooks/useGithubUser';
+
 import About from './About';
 
-vi.mock('../../hooks/useGithubUser');
-
+vi.mock('@hooks/useGithubUser');
 describe('About', () => {
-  const mockUseGithubUser = vi.mocked(useGithubUserHook.useGithubUser);
+  const mockUseGithubUser = vi.mocked(useGithubUser);
 
   const MOCK_AVATAR_URL = 'https://test.com/avatar';
   const MOCK_USER_URL = 'https://test.com/user';
@@ -16,7 +16,7 @@ describe('About', () => {
   const MOCK_AUTHOR_USER_URL = 'https://github.com/pelegrine365';
 
   const renderAbout = (
-    mockData: Partial<ReturnType<typeof useGithubUserHook.useGithubUser>> = {}
+    mockData: Partial<ReturnType<typeof useGithubUser>> = {}
   ) => {
     const defaultMockData = {
       avatarURL: MOCK_AVATAR_URL,

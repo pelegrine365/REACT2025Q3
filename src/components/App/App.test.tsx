@@ -24,7 +24,7 @@ describe('App component', () => {
   });
 
   it('renders SearchBar with saved value', () => {
-    vi.spyOn(storage, 'getSavedSearchValue').mockReturnValue('pikachu');
+    vi.spyOn(storage, 'getLocalStorageItem').mockReturnValue('pikachu');
     vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
 
     render(<App />);
@@ -32,8 +32,8 @@ describe('App component', () => {
   });
 
   it('clears saved value on empty search', async () => {
-    vi.spyOn(storage, 'getSavedSearchValue').mockReturnValue('');
-    const clearSpy = vi.spyOn(storage, 'clearSearchValue');
+    vi.spyOn(storage, 'getLocalStorageItem').mockReturnValue('pikachu');
+    const clearSpy = vi.spyOn(storage, 'removeLocalStorageItem');
     vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
 
     render(<App />);
@@ -48,7 +48,7 @@ describe('App component', () => {
   });
 
   it('shows error message on API failure', async () => {
-    vi.spyOn(storage, 'getSavedSearchValue').mockReturnValue('');
+    vi.spyOn(storage, 'getLocalStorageItem').mockReturnValue('');
     vi.spyOn(service, 'getPokemonsBySearch').mockRejectedValue(
       new Error('API call failed')
     );

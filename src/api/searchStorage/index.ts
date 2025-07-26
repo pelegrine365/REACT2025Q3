@@ -1,5 +1,5 @@
 export {
-  getSavedSearchValue,
-  saveSearchValue,
-  clearSearchValue,
+  getLocalStorageItem,
+  setLocalStorageItem,
+  removeLocalStorageItem,
 } from './searchStorage';

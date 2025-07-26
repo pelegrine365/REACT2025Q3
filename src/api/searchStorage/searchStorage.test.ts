@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
-  getSavedSearchValue,
-  saveSearchValue,
-  clearSearchValue,
+  getLocalStorageItem,
+  setLocalStorageItem,
+  removeLocalStorageItem,
 } from '@api/searchStorage';
 import { SEARCH_VALUE_KEY } from '@constants';
 
@@ -16,7 +16,7 @@ describe('searchStorage', () => {
       .spyOn(Storage.prototype, 'getItem')
       .mockReturnValue('MUDBRAY');
 
-    const value = getSavedSearchValue();
+    const value = getLocalStorageItem(SEARCH_VALUE_KEY);
 
     expect(spy).toHaveBeenCalledWith(SEARCH_VALUE_KEY);
     expect(value).toBe('MUDBRAY');
@@ -25,10 +25,10 @@ describe('searchStorage', () => {
   it('returns empty string if key does not exist in localStorage', () => {
     vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(null);
 
-    const value = getSavedSearchValue();
+    const value = getLocalStorageItem(SEARCH_VALUE_KEY);
 
-    expect(value).toBe('');
-    expect(value).not.toBe(null);
+    expect(value).toBe(null);
+    expect(value).not.toBe('');
   });
 
   it('throws if getItem throws error', () => {
@@ -36,13 +36,15 @@ describe('searchStorage', () => {
       throw new Error('getItem error');
     });
 
-    expect(() => getSavedSearchValue()).toThrow('getItem error');
+    expect(() => getLocalStorageItem(SEARCH_VALUE_KEY)).toThrow(
+      'getItem error'
+    );
   });
 
   it('saves value to localStorage', () => {
     const spy = vi.spyOn(Storage.prototype, 'setItem');
 
-    saveSearchValue('TOXAPEX');
+    setLocalStorageItem(SEARCH_VALUE_KEY, 'TOXAPEX');
 
     expect(spy).toHaveBeenCalledWith(SEARCH_VALUE_KEY, 'TOXAPEX');
   });
@@ -52,13 +54,15 @@ describe('searchStorage', () => {
       throw new Error('setItem error');
     });
 
-    expect(() => saveSearchValue('FOMANTIS')).toThrow('setItem error');
+    expect(() => setLocalStorageItem(SEARCH_VALUE_KEY, 'FOMANTIS')).toThrow(
+      'setItem error'
+    );
   });
 
   it('removes value from localStorage', () => {
     const spy = vi.spyOn(Storage.prototype, 'removeItem');
 
-    clearSearchValue();
+    removeLocalStorageItem(SEARCH_VALUE_KEY);
 
     expect(spy).toHaveBeenCalledWith(SEARCH_VALUE_KEY);
   });
@@ -68,6 +72,8 @@ describe('searchStorage', () => {
       throw new Error('removeItem error');
     });
 
-    expect(() => clearSearchValue()).toThrow('removeItem error');
+    expect(() => removeLocalStorageItem(SEARCH_VALUE_KEY)).toThrow(
+      'removeItem error'
+    );
   });
 });

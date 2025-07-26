@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { getSavedSearchValue } from '@api/searchStorage';
+import { getLocalStorageItem } from '@api/searchStorage';
+import { SEARCH_VALUE_KEY } from '@constants';
 
 import './index.css';
 
@@ -12,7 +13,7 @@ const SearchBar = ({ searchValue, onSearch }: SearchBarProps) => {
   const [inputValue, setInputValue] = useState(searchValue);
 
   const handleClick = () => {
-    const savedValue = getSavedSearchValue();
+    const savedValue = getLocalStorageItem(SEARCH_VALUE_KEY);
     if (savedValue === inputValue) {
       return;
     }

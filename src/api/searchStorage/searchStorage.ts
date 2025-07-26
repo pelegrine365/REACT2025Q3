@@ -1,13 +1,11 @@
-import { SEARCH_VALUE_KEY } from '@constants';
-
-export function getSavedSearchValue(): string {
-  return localStorage.getItem(SEARCH_VALUE_KEY) ?? '';
+export function getLocalStorageItem(key: string): string | null {
+  return localStorage.getItem(key);
 }
 
-export function saveSearchValue(value: string): void {
-  localStorage.setItem(SEARCH_VALUE_KEY, value);
+export function setLocalStorageItem(key: string, value: string): void {
+  localStorage.setItem(key, value);
 }
 
-export function clearSearchValue(): void {
-  localStorage.removeItem(SEARCH_VALUE_KEY);
+export function removeLocalStorageItem(key: string): void {
+  localStorage.removeItem(key);
 }

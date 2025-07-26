@@ -1,34 +1,33 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
-  getLocalStorageItem,
-  setLocalStorageItem,
-  removeLocalStorageItem,
-} from '@api/searchStorage';
+  getSearchQuery,
+  setSearchQuery,
+  removeSearchQuery,
+} from '@api/searchQueryApi';
 import { SEARCH_VALUE_KEY } from '@constants';
 
-describe('searchStorage', () => {
+describe('searchQueryApi', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('returns saved value from localStorage', () => {
+  it('returns saved value from searchQueryApi', () => {
     const spy = vi
       .spyOn(Storage.prototype, 'getItem')
       .mockReturnValue('MUDBRAY');
 
-    const value = getLocalStorageItem(SEARCH_VALUE_KEY);
+    const value = getSearchQuery();
 
     expect(spy).toHaveBeenCalledWith(SEARCH_VALUE_KEY);
     expect(value).toBe('MUDBRAY');
   });
 
-  it('returns empty string if key does not exist in localStorage', () => {
+  it('returns null if key does not exist in localStorage', () => {
     vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(null);
 
-    const value = getLocalStorageItem(SEARCH_VALUE_KEY);
+    const value = getSearchQuery();
 
     expect(value).toBe(null);
-    expect(value).not.toBe('');
   });
 
   it('throws if getItem throws error', () => {
@@ -36,15 +35,13 @@ describe('searchStorage', () => {
       throw new Error('getItem error');
     });
 
-    expect(() => getLocalStorageItem(SEARCH_VALUE_KEY)).toThrow(
-      'getItem error'
-    );
+    expect(() => getSearchQuery()).toThrow('getItem error');
   });
 
   it('saves value to localStorage', () => {
     const spy = vi.spyOn(Storage.prototype, 'setItem');
 
-    setLocalStorageItem(SEARCH_VALUE_KEY, 'TOXAPEX');
+    setSearchQuery('TOXAPEX');
 
     expect(spy).toHaveBeenCalledWith(SEARCH_VALUE_KEY, 'TOXAPEX');
   });
@@ -54,15 +51,13 @@ describe('searchStorage', () => {
       throw new Error('setItem error');
     });
 
-    expect(() => setLocalStorageItem(SEARCH_VALUE_KEY, 'FOMANTIS')).toThrow(
-      'setItem error'
-    );
+    expect(() => setSearchQuery('FOMANTIS')).toThrow('setItem error');
   });
 
   it('removes value from localStorage', () => {
     const spy = vi.spyOn(Storage.prototype, 'removeItem');
 
-    removeLocalStorageItem(SEARCH_VALUE_KEY);
+    removeSearchQuery();
 
     expect(spy).toHaveBeenCalledWith(SEARCH_VALUE_KEY);
   });
@@ -72,8 +67,6 @@ describe('searchStorage', () => {
       throw new Error('removeItem error');
     });
 
-    expect(() => removeLocalStorageItem(SEARCH_VALUE_KEY)).toThrow(
-      'removeItem error'
-    );
+    expect(() => removeSearchQuery()).toThrow('removeItem error');
   });
 });

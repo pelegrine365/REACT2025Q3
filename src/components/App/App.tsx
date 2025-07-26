@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 
 import { getPokemonsBySearch } from '@services/pokemonService';
 import {
-  getLocalStorageItem,
-  setLocalStorageItem,
-  removeLocalStorageItem,
-} from '@api/searchStorage';
+  getSearchQuery,
+  setSearchQuery,
+  removeSearchQuery,
+} from '@api/searchQueryApi';
 
 import SearchBar from '@components/SearchBar';
 import CardList from '@components/CardList';
@@ -16,13 +16,12 @@ import ErrorBoundary from '@components/ErrorBoundary';
 import type { Pokemon } from '@types';
 
 import './index.css';
-import { SEARCH_VALUE_KEY } from '../../constants';
 
 const App = () => {
   const [results, setResults] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(false);
   const [initialSearchValue, setInitialSearchValue] = useState(
-    () => getLocalStorageItem(SEARCH_VALUE_KEY) || ''
+    () => getSearchQuery() || ''
   );
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -32,9 +31,9 @@ const App = () => {
     setHasError(false);
 
     if (inputValue) {
-      setLocalStorageItem(SEARCH_VALUE_KEY, inputValue);
+      setSearchQuery(inputValue);
     } else {
-      removeLocalStorageItem(SEARCH_VALUE_KEY);
+      removeSearchQuery();
     }
 
     try {
@@ -61,7 +60,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const savedSearchValue = getLocalStorageItem(SEARCH_VALUE_KEY);
+    const savedSearchValue = getSearchQuery();
     fetchAndSetPokemons(savedSearchValue);
   }, []);
 

@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import App from './App';
-import * as storage from '../../api/searchStorage';
-import * as service from '../../services/pokemonService';
-import { mockPokemonList } from '../../__tests__/mocks/pokemon';
+import * as storage from '@api/searchQueryApi';
+import * as service from '@services/pokemonService';
+import { mockPokemonList } from '@mocks/pokemon';
 
-vi.mock('../CardList/CardList', () => ({
+vi.mock('@components/CardList', () => ({
   default: ({ results }: { results: typeof mockPokemonList }) => (
     <div>
       {results.map((pokemon) => (
@@ -23,17 +23,20 @@ describe('App component', () => {
     vi.stubGlobal('fetch', vi.fn());
   });
 
-  it('renders SearchBar with saved value', () => {
-    vi.spyOn(storage, 'getLocalStorageItem').mockReturnValue('pikachu');
+  it('renders SearchBar with saved value', async () => {
+    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
     vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
 
     render(<App />);
-    expect(screen.getByDisplayValue('pikachu')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('pikachu')).toBeInTheDocument();
+    });
   });
 
   it('clears saved value on empty search', async () => {
-    vi.spyOn(storage, 'getLocalStorageItem').mockReturnValue('pikachu');
-    const clearSpy = vi.spyOn(storage, 'removeLocalStorageItem');
+    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
+    const clearSpy = vi.spyOn(storage, 'removeSearchQuery');
     vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
 
     render(<App />);
@@ -48,12 +51,15 @@ describe('App component', () => {
   });
 
   it('shows error message on API failure', async () => {
-    vi.spyOn(storage, 'getLocalStorageItem').mockReturnValue('');
+    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('');
     vi.spyOn(service, 'getPokemonsBySearch').mockRejectedValue(
       new Error('API call failed')
     );
 
     render(<App />);
-    await screen.findByText('API call failed');
+
+    await waitFor(() => {
+      expect(screen.getByText('API call failed')).toBeInTheDocument();
+    });
   });
 });

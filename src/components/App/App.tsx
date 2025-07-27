@@ -1,7 +1,8 @@
 import Navigation from '@components/Navigation';
 import { Route, Routes } from 'react-router';
-import HomePage from 'pages/HomePage';
-import AboutPage from 'pages/AboutPage';
+import HomePage from '@pages/HomePage';
+import AboutPage from '@pages/AboutPage';
+import NotFoundPage from '@pages/NotFoundPage';
 import ErrorBoundary from '@components/ErrorBoundary';
 
 import './index.css';
@@ -15,6 +16,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
       </div>

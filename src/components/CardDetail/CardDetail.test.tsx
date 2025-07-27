@@ -43,7 +43,7 @@ describe('CardDetail', () => {
 
   it('shows spinner while loading pokemon details', async () => {
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockImplementation(() => new Promise(() => { }));
+    mockFetchPokemonBySpecies.mockImplementation(() => new Promise(() => {}));
 
     render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
 

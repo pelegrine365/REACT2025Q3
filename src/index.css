@@ -11,6 +11,13 @@ body {
   box-sizing: border-box;
   position: relative;
   background-color: var(--pokemon-white);
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 :root {

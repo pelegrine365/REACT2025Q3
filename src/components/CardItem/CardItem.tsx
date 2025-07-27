@@ -2,7 +2,13 @@ import type { BasePokemon } from '@types';
 import { useState } from 'react';
 import './index.css';
 
-const CardItem = ({ id, name, image }: Partial<BasePokemon>) => {
+interface CardItemProps {
+  pokemon: BasePokemon;
+  onCardClick: (pokemonId: number) => void;
+}
+
+const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
+  const { id, name, image } = pokemon;
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = () => {
@@ -12,7 +18,7 @@ const CardItem = ({ id, name, image }: Partial<BasePokemon>) => {
   const shouldShowFallback = imageError || !image || image.trim() === '';
 
   return (
-    <div className="card">
+    <div className="card" onClick={() => onCardClick(id)}>
       <div className="card-header">
         <div className="card-image">
           {shouldShowFallback ? (

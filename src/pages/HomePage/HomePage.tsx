@@ -2,6 +2,8 @@ import CardList from '@components/CardList';
 import ErrorMessage from '@components/ErrorMessage';
 import SearchBar from '@components/SearchBar';
 import Spinner from '@components/Spinner';
+import CardDetail from '@components/CardDetail';
+import TwoColumnLayout from '@components/TwoColumnLayout';
 import { useSearchQuery } from '@hooks/useSearchQuery';
 import { getPokemonsBySearch } from '@services/pokemonService';
 import type { BasePokemon } from '@types';
@@ -9,11 +11,15 @@ import { useEffect, useState } from 'react';
 import './index.css';
 
 const HomePage = () => {
-  const [results, setResults] = useState<Partial<BasePokemon>[]>([]);
+  const [results, setResults] = useState<BasePokemon[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const { searchQuery, updateSearchQuery } = useSearchQuery();
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedPokemon, setSelectedPokemon] = useState<BasePokemon | null>(
+    null
+  );
 
   const fetchAndSetPokemons = async (inputValue: string) => {
     setLoading(true);
@@ -39,6 +45,19 @@ const HomePage = () => {
     updateSearchQuery(inputValue);
   };
 
+  const handleCardClick = (pokemonId: number) => {
+    const pokemon = results.find((p) => p.id === pokemonId);
+    if (pokemon) {
+      setSelectedPokemon(pokemon);
+      setIsDetailOpen(true);
+    }
+  };
+
+  const handleCloseDetail = () => {
+    setIsDetailOpen(false);
+    setSelectedPokemon(null);
+  };
+
   useEffect(() => {
     fetchAndSetPokemons(searchQuery);
   }, [searchQuery]);
@@ -52,7 +71,22 @@ const HomePage = () => {
       </div>
       <div className="main">
         {loading && !hasError && <Spinner />}
-        {!loading && !hasError && <CardList results={results} />}
+        {!loading && !hasError && (
+          <TwoColumnLayout
+            isDetailOpen={isDetailOpen}
+            leftColumn={
+              <CardList results={results} onCardClick={handleCardClick} />
+            }
+            rightColumn={
+              selectedPokemon && (
+                <CardDetail
+                  pokemon={selectedPokemon}
+                  onClose={handleCloseDetail}
+                />
+              )
+            }
+          />
+        )}
         {hasError && <ErrorMessage message={errorMessage} />}
       </div>
     </div>

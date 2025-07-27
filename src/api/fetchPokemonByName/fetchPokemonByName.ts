@@ -19,10 +19,7 @@ export async function fetchPokemonByName(name: string): Promise<BasePokemon> {
   return {
     id: pokemonData.id,
     name: pokemonData.name,
-    image:
-      pokemonData.sprites?.other?.['official-artwork']?.front_shiny ||
-      pokemonData.sprites?.other?.['official-artwork']?.front_default ||
-      '',
+    image: pokemonData.sprites.other['official-artwork'].front_default || '',
     types: pokemonData.types.map((type: PokemonType) => type.type.name),
     abilities: pokemonData.abilities.map(
       (ability: { ability: { name: string } }) => ability.ability.name

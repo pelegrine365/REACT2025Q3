@@ -4,7 +4,7 @@ import * as fetchByName from '@api/fetchPokemonByName';
 import * as getOffsetUtil from '@utils/getRandomOffset';
 import { POKEMONS_PER_REQUEST } from '@constants';
 import { mockPokemonList } from '@mocks/pokemon';
-import type { Pokemon } from '@types';
+import type { BasePokemon } from '@types';
 
 const createMockResponse = (responseInit: Partial<Response>): Response => {
   return {
@@ -40,13 +40,16 @@ describe('fetchDefaultPokemonList', () => {
     const fetchByNameSpy = vi
       .spyOn(fetchByName, 'fetchPokemonByName')
       .mockImplementation(
-        (name: string): Promise<Pokemon> =>
+        (name: string): Promise<BasePokemon> =>
           Promise.resolve({
             id: 1,
             name,
             image: '',
             types: [],
-            description: '',
+            abilities: [],
+            height: 0,
+            weight: 0,
+            stats: [],
           })
       );
     const result = await fetchDefaultPokemonList();
@@ -56,8 +59,26 @@ describe('fetchDefaultPokemonList', () => {
     );
     expect(fetchByNameSpy).toHaveBeenCalledTimes(mockPokemonList.length);
     expect(result).toEqual([
-      { id: 1, name: 'skitty', image: '', types: [], description: '' },
-      { id: 1, name: 'happiny', image: '', types: [], description: '' },
+      {
+        id: 1,
+        name: 'skitty',
+        image: '',
+        types: [],
+        abilities: [],
+        height: 0,
+        weight: 0,
+        stats: [],
+      },
+      {
+        id: 1,
+        name: 'happiny',
+        image: '',
+        types: [],
+        abilities: [],
+        height: 0,
+        weight: 0,
+        stats: [],
+      },
     ]);
   });
 

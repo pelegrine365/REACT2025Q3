@@ -1,10 +1,10 @@
-import type { Pokemon } from '@types';
+import type { BasePokemon } from '@types';
 import CardItem from '@components/CardItem';
 
 import './index.css';
 
 interface CardListProps {
-  results: Pokemon[];
+  results: Partial<BasePokemon>[];
 }
 
 const CardList = ({ results }: CardListProps) => {

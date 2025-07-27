@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getPokemonsBySearch } from '@services/pokemonService';
 import * as apiByName from '@api/fetchPokemonByName';
 import * as apiDefaultList from '@api/fetchDefaultPokemonList';
-import type { Pokemon } from '@types';
+import type { BasePokemon } from '@types';
 import { mockPokemon, mockPokemonList } from '@mocks/pokemon';
 
 vi.mock('@api/fetchPokemonByName');
@@ -10,7 +10,7 @@ vi.mock('@api/fetchDefaultPokemonList');
 
 describe('getPokemonsBySearch', () => {
   const mockFetchPokemonByName = (
-    mockValue?: Pokemon,
+    mockValue?: BasePokemon,
     shouldReject = false,
     errorValue?: Error
   ) => {
@@ -26,7 +26,7 @@ describe('getPokemonsBySearch', () => {
   };
 
   const mockFetchDefaultPokemonList = (
-    mockValue?: Pokemon[],
+    mockValue?: BasePokemon[],
     shouldReject = false,
     errorValue?: Error
   ) => {

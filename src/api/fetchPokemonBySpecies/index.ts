@@ -1,0 +1,1 @@
+export { fetchPokemonBySpecies } from './fetchPokemonBySpecies';

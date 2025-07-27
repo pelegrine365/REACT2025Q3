@@ -1,9 +1,9 @@
 import { POKEMON_TOTAL_COUNT, POKEMONS_PER_REQUEST } from '@constants';
 import { fetchPokemonByName } from '@api/fetchPokemonByName';
 import { getRandomOffset } from '@utils/getRandomOffset';
-import type { Pokemon } from '@types';
+import type { BasePokemon } from '@types';
 
-export async function fetchDefaultPokemonList(): Promise<Pokemon[]> {
+export async function fetchDefaultPokemonList(): Promise<BasePokemon[]> {
   const response = await fetch(
     `https://pokeapi.co/api/v2/pokemon?limit=${POKEMONS_PER_REQUEST}&offset=${getRandomOffset(POKEMON_TOTAL_COUNT, POKEMONS_PER_REQUEST)}`
   );

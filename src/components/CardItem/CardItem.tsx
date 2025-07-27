@@ -1,30 +1,29 @@
-import type { Pokemon } from '../../types';
-
+import type { BasePokemon } from '@types';
+import { useState } from 'react';
 import './index.css';
 
-const CardItem = ({ id, name, image, description, types }: Pokemon) => {
+const CardItem = ({ id, name, image }: Partial<BasePokemon>) => {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  const shouldShowFallback = imageError || !image || image.trim() === '';
+
   return (
     <div className="card">
       <div className="card-header">
         <div className="card-image">
-          <img src={image} alt={name} />
+          {shouldShowFallback ? (
+            <div className="card-image-fallback">Not found</div>
+          ) : (
+            <img src={image} alt={name} onError={handleImageError} />
+          )}
         </div>
-        <div className="card-name">
-          <h2>{name.toUpperCase()} </h2>
+        <div className="card-name-section">
+          <h2 className="card-name">{name?.toUpperCase() || 'UNKNOWN'}</h2>
           <h3 className="card-id">#{id}</h3>
-        </div>
-      </div>
-
-      <div className="card-main">
-        <div className="card-description">
-          <p>{description}</p>
-        </div>
-        <div className="card-types">
-          {types.map((type) => (
-            <span key={type} className="type-label">
-              {type}
-            </span>
-          ))}
         </div>
       </div>
     </div>

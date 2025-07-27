@@ -13,11 +13,6 @@ const mockPokemon = {
 };
 
 describe('CardItem', () => {
-  const mockPokemonWithoutTypes = {
-    ...mockPokemon,
-    types: [],
-  };
-
   beforeEach(() => {
     render(<CardItem {...mockPokemon} />);
   });
@@ -45,28 +40,5 @@ describe('CardItem', () => {
 
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', mockPokemon.image);
-  });
-
-  it('renders pokemon description', () => {
-    expect(screen.getByText(mockPokemon.description)).toBeInTheDocument();
-  });
-
-  it('does not show type labels when types are empty', () => {
-    const { container } = render(<CardItem {...mockPokemonWithoutTypes} />);
-    const typeLabels = container.getElementsByClassName('type-label');
-    expect(typeLabels.length).toBe(0);
-  });
-
-  it('handles missing description gracefully', () => {
-    const pokemonWithoutDescription = {
-      ...mockPokemon,
-      description: '',
-    };
-
-    const { container } = render(<CardItem {...pokemonWithoutDescription} />);
-    const description = container.querySelector('.card-description p');
-
-    expect(description).toBeInTheDocument();
-    expect(description).toBeEmptyDOMElement();
   });
 });

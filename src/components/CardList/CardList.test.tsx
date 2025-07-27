@@ -52,22 +52,6 @@ describe('CardList', () => {
     }
   });
 
-  it('renders pokemon descriptions', () => {
-    render(<CardList results={mockPokemons} />);
-
-    expect(
-      screen.getByText(
-        'Its long tail serves as a ground to protect itself from its own high-voltage power.'
-      )
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText(
-        'Its hard scales provide strong protection. It uses its hefty bulk to execute powerful moves.'
-      )
-    ).toBeInTheDocument();
-  });
-
   it('renders no cards when results is empty', () => {
     render(<CardList results={[]} />);
 

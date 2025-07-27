@@ -4,12 +4,12 @@ import SearchBar from '@components/SearchBar';
 import Spinner from '@components/Spinner';
 import { useSearchQuery } from '@hooks/useSearchQuery';
 import { getPokemonsBySearch } from '@services/pokemonService';
-import type { Pokemon } from '@types';
+import type { BasePokemon } from '@types';
 import { useEffect, useState } from 'react';
 import './index.css';
 
 const HomePage = () => {
-  const [results, setResults] = useState<Pokemon[]>([]);
+  const [results, setResults] = useState<Partial<BasePokemon>[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');

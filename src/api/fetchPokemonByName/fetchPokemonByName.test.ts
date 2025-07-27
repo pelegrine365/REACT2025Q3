@@ -1,12 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fetchPokemonByName } from './fetchPokemonByName';
-import {
-  mockSpeciesResponse,
-  mockPokemonResponse,
-  mockFailedPokemonResponse,
-  mockFailedSpeciesResponse,
-  mockSpeciesResponseWithoutEnglish,
-} from '@mocks/pokemon';
 
 let mockFetch: ReturnType<typeof vi.mocked<typeof fetch>>;
 
@@ -16,20 +9,51 @@ beforeEach(() => {
   mockFetch = vi.mocked(fetch);
 });
 
+const mockPokemonApiResponse = {
+  id: 54,
+  name: 'psyduck',
+  sprites: {
+    other: {
+      'official-artwork': {
+        front_default:
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/54.png',
+        front_shiny: null,
+      },
+    },
+  },
+  types: [
+    {
+      slot: 1,
+      type: { name: 'water', url: 'https://pokeapi.co/api/v2/type/11/' },
+    },
+  ],
+  abilities: [
+    { ability: { name: 'damp' } },
+    { ability: { name: 'cloud-nine' } },
+  ],
+  height: 8,
+  weight: 196,
+  stats: [
+    { stat: { name: 'hp' }, base_stat: 50 },
+    { stat: { name: 'attack' }, base_stat: 52 },
+    { stat: { name: 'defense' }, base_stat: 48 },
+  ],
+};
+
 describe('fetchPokemonByName', () => {
-  it('returns full Pokemon data including description', async () => {
-    mockFetch
-      .mockResolvedValueOnce(mockPokemonResponse as Response)
-      .mockResolvedValueOnce(mockSpeciesResponse as Response);
+  it('returns full Pokemon data with all required fields', async () => {
+    const mockResponse = {
+      ok: true,
+      json: vi.fn().mockResolvedValue(mockPokemonApiResponse),
+    } as Partial<Response>;
+
+    mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
     const result = await fetchPokemonByName('psyduck');
 
-    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch).toHaveBeenCalledWith(
       'https://pokeapi.co/api/v2/pokemon/psyduck'
-    );
-    expect(fetch).toHaveBeenCalledWith(
-      'https://pokeapi.co/api/v2/pokemon-species/psyduck'
     );
 
     expect(result).toEqual({
@@ -38,52 +62,42 @@ describe('fetchPokemonByName', () => {
       image:
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/54.png',
       types: ['water'],
-      description:
-        'While lulling its enemies with its vacant look, this wily POKéMON will use psychokinetic powers.',
+      abilities: ['damp', 'cloud-nine'],
+      height: 8,
+      weight: 196,
+      stats: [
+        { name: 'hp', value: 50 },
+        { name: 'attack', value: 52 },
+        { name: 'defense', value: 48 },
+      ],
     });
   });
 
-  it('throws if first request (pokemon) fails', async () => {
-    mockFetch.mockResolvedValueOnce(mockFailedPokemonResponse as Response);
+  it('throws error when Pokemon does not exist', async () => {
+    const mockFailedResponse = {
+      ok: false,
+      status: 404,
+    } as Partial<Response>;
+
+    mockFetch.mockResolvedValueOnce(mockFailedResponse as Response);
 
     await expect(fetchPokemonByName('missingno')).rejects.toThrow(
       'MISSINGNO does not exist. Please try again.'
     );
   });
 
-  it('falls back to default description if second request (species) fails with !ok', async () => {
-    mockFetch
-      .mockResolvedValueOnce(mockPokemonResponse as Response)
-      .mockResolvedValueOnce(mockFailedSpeciesResponse as Response);
+  it('converts name to lowercase before making request', async () => {
+    const mockResponse = {
+      ok: true,
+      json: vi.fn().mockResolvedValue(mockPokemonApiResponse),
+    } as Partial<Response>;
 
-    const result = await fetchPokemonByName('psyduck');
+    mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-    expect(result.description).toBe(
-      "Sorry, we couldn't find a description for this Pokémon"
-    );
-  });
+    await fetchPokemonByName('PSYDUCK');
 
-  it('falls back to default description if second request (species) throws', async () => {
-    mockFetch
-      .mockResolvedValueOnce(mockPokemonResponse as Response)
-      .mockRejectedValueOnce(new Error('Species fetch failed'));
-
-    const result = await fetchPokemonByName('psyduck');
-
-    expect(result.description).toBe(
-      "Sorry, we couldn't find a description for this Pokémon"
-    );
-  });
-
-  it('falls back if no English flavor text exists', async () => {
-    mockFetch
-      .mockResolvedValueOnce(mockPokemonResponse as Response)
-      .mockResolvedValueOnce(mockSpeciesResponseWithoutEnglish as Response);
-
-    const result = await fetchPokemonByName('psyduck');
-
-    expect(result.description).toBe(
-      "Sorry, we couldn't find a description for this Pokémon"
+    expect(fetch).toHaveBeenCalledWith(
+      'https://pokeapi.co/api/v2/pokemon/psyduck'
     );
   });
 });

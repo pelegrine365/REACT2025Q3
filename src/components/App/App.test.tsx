@@ -18,6 +18,10 @@ vi.mock('@components/CardList', () => ({
   ),
 }));
 
+vi.mock('@components/Pagination', () => ({
+  default: () => <div data-testid="pagination">Pagination</div>,
+}));
+
 describe('App component', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -26,7 +30,14 @@ describe('App component', () => {
 
   it('renders SearchBar with saved value', async () => {
     vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
-    vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
+    vi.spyOn(service, 'getPokemonsPaginatedList').mockResolvedValue({
+      results: [mockPokemonList[0]],
+      totalCount: 1,
+      hasNext: false,
+      hasPrev: false,
+      currentPage: 1,
+      totalPages: 1,
+    });
 
     render(
       <BrowserRouter>
@@ -42,7 +53,14 @@ describe('App component', () => {
   it('clears saved value on empty search', async () => {
     vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
     const clearSpy = vi.spyOn(storage, 'removeSearchQuery');
-    vi.spyOn(service, 'getPokemonsBySearch').mockResolvedValue(mockPokemonList);
+    vi.spyOn(service, 'getPokemonsPaginatedList').mockResolvedValue({
+      results: mockPokemonList,
+      totalCount: 1010,
+      hasNext: true,
+      hasPrev: false,
+      currentPage: 1,
+      totalPages: 101,
+    });
 
     render(
       <BrowserRouter>
@@ -61,7 +79,7 @@ describe('App component', () => {
 
   it('shows error message on API failure', async () => {
     vi.spyOn(storage, 'getSearchQuery').mockReturnValue('');
-    vi.spyOn(service, 'getPokemonsBySearch').mockRejectedValue(
+    vi.spyOn(service, 'getPokemonsPaginatedList').mockRejectedValue(
       new Error('API call failed')
     );
 

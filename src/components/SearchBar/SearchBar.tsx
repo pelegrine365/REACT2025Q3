@@ -16,8 +16,7 @@ const SearchBar = ({ searchValue, onSearch }: SearchBarProps) => {
     if (savedValue === inputValue) {
       return;
     }
-
-    onSearch(inputValue);
+    onSearch(inputValue.trim());
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

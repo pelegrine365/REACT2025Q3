@@ -1,1 +1,1 @@
-export { getPokemonsBySearch } from './pokemonService';
+export { getPokemonsPaginatedList } from './pokemonService';

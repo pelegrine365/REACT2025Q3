@@ -48,6 +48,15 @@ export interface FlavorTextEntry {
   version: NamedAPIResource;
 }
 
+export interface PaginatedPokemonListResponse {
+  results: BasePokemon[];
+  totalCount: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  currentPage: number;
+  totalPages: number;
+}
+
 export interface GithubUser {
   name: string;
   avatarURL: string;

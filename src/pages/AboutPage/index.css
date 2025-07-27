@@ -47,16 +47,6 @@
   text-align: left;
 }
 
-.main::after {
-  content: '';
-  position: sticky;
-  bottom: 0;
-  height: 60px;
-  background: linear-gradient(to top, var(--pokemon-red), transparent);
-  margin: 2rem -1rem -2rem -1rem;
-  pointer-events: none;
-}
-
 .about__container {
   max-width: 800px;
   margin: 0 auto;

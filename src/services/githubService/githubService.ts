@@ -7,6 +7,6 @@ export async function getGithubUser(name: string): Promise<GithubUser> {
   return {
     name: data.name,
     avatarURL: data.avatar_url,
-    userURL: data.url,
+    userURL: data.html_url,
   };
 }

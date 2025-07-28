@@ -10,7 +10,6 @@ body {
   padding: 0;
   box-sizing: border-box;
   position: relative;
-  background-color: var(--pokemon-white);
   overflow-x: hidden;
 }
 
@@ -25,6 +24,7 @@ body {
   --pokemon-beige: #f5f5dc;
   --pokemon-beige-transparent: rgba(250, 248, 240, 0.95);
   --pokemon-red: #cc0000;
+  --dark-red: #690808;
   --pokemon-blue: #3b4cca;
   --pokemon-yellow: #ffde00;
   --pokemon-black: #2a2a2a;
@@ -33,11 +33,15 @@ body {
   --glass: rgba(255, 255, 255, 0.1);
   --grid-line: rgba(59, 76, 202, 0.2);
   --dark-surface: #2a2a2a;
+  --dark-panel: #c2c200;
   --neon-blue: #4dd0e1;
+  --theme-dark-bg-primary: var(--dark-surface);
+  --theme-dark-bg-secondary: var(--dark-panel);
+  --theme-dark-text: var(--pokemon-beige);
+  --theme-light-bg: var(--pokemon-beige);
+  --theme-light-bg: var(--pokemon-beige);
+  --theme-light-text: var(--dark-surface);
 
   font-weight: 400;
   font-family: 'Inter', sans-serif;
-
-  color: var(--pokemon-black);
-  background-color: var(--pokemon-red);
 }

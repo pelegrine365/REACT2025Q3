@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { ThemeContext } from 'contexts';
 
 import CardList from '@components/CardList';
 import ErrorMessage from '@components/ErrorMessage';
@@ -17,6 +18,7 @@ import type { BasePokemon, PaginatedPokemonListResponse } from '@types';
 import './index.css';
 
 const HomePage = () => {
+  const { theme } = useContext(ThemeContext);
   const [paginationData, setPaginationData] =
     useState<PaginatedPokemonListResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -101,7 +103,7 @@ const HomePage = () => {
   }, [detailsId, paginationData]);
 
   return (
-    <div className="home-page">
+    <div className={`home-page theme-${theme}`}>
       <div className="header">
         <h1>Pokemons Cards</h1>
       </div>

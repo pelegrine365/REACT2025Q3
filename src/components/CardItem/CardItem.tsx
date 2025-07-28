@@ -1,6 +1,7 @@
 import type { BasePokemon } from '@types';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import './index.css';
+import { ThemeContext } from 'contexts';
 
 interface CardItemProps {
   pokemon: BasePokemon;
@@ -10,6 +11,7 @@ interface CardItemProps {
 const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
   const { id, name, image } = pokemon;
   const [imageError, setImageError] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   const handleImageError = () => {
     setImageError(true);
@@ -18,7 +20,7 @@ const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
   const shouldShowFallback = imageError || !image || image.trim() === '';
 
   return (
-    <div className="card" onClick={() => onCardClick(id)}>
+    <div className={`card theme-${theme}`} onClick={() => onCardClick(id)}>
       <div className="card-header">
         <div className="card-image">
           {shouldShowFallback ? (

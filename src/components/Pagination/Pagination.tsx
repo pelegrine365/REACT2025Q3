@@ -1,6 +1,8 @@
 import { getVisiblePages } from '@utils/getVisiblePages';
 
 import './index.css';
+import { useContext } from 'react';
+import { ThemeContext } from 'contexts';
 
 interface PaginationProps {
   currentPage: number;
@@ -18,9 +20,10 @@ const Pagination = ({
   hasPrev,
 }: PaginationProps) => {
   const visiblePages = getVisiblePages(currentPage, totalPages);
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <div className="pagination">
+    <div className={`pagination theme-${theme}`}>
       <button
         className="pagination-button"
         onClick={() => onPageChange(currentPage - 1)}

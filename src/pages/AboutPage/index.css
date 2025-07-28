@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-
+  padding: 0 2rem;
   flex: 1;
   min-height: 100%;
 }
@@ -16,6 +16,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.theme-dark .header {
+  background-color: var(--theme-dark-bg-primary);
 }
 
 .about-page h1 {
@@ -35,7 +39,7 @@
   z-index: 1;
 }
 
-.main {
+.about-page .main {
   flex: 1;
   padding: 1rem 1rem 2rem 1rem;
   border-top: none;
@@ -43,8 +47,14 @@
   min-height: calc(100vh - 300px);
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
   text-align: left;
+  margin-top: 2rem;
+}
+
+.theme-dark .main {
+  background-color: var(--theme-dark-bg-primary);
+  color: var(--theme-dark-text);
 }
 
 .about__container {
@@ -63,6 +73,11 @@
   padding: 2rem;
   border: 2px solid var(--pokemon-black);
   border-radius: 0.75rem;
+}
+
+.theme-dark .about__section {
+  background: var(--theme-dark-bg-secondary);
+  border-color: var(--pokemon-glow);
 }
 
 .about__section h2 {

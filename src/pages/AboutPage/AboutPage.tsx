@@ -1,14 +1,18 @@
-import { AUTHOR_GITHUB_NAME } from '../../constants';
-import { useGithubUser } from '../../hooks/useGithubUser';
+import { useContext } from 'react';
+import { AUTHOR_GITHUB_NAME } from '@constants';
+import { useGithubUser } from '@hooks/useGithubUser';
 import Spinner from '@components/Spinner';
+import { ThemeContext } from 'contexts';
 
 import './index.css';
 
 const About = () => {
+  const { theme } = useContext(ThemeContext);
   const { avatarURL, userURL, loading, error } =
     useGithubUser(AUTHOR_GITHUB_NAME);
+
   return (
-    <div className="about-page">
+    <div className={`about-page theme-${theme}`}>
       <div className="header">
         <h1>About Pokemon Cards</h1>
       </div>

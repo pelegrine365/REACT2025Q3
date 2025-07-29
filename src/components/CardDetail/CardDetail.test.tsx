@@ -1,7 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import CardDetail from '../CardDetail';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import CardDetail from '@components/CardDetail';
+
 import type { BasePokemon } from '@types';
+
+import { mockPokemon, mockPokemonSpecies } from '@mocks/pokemon';
 
 vi.mock('@api/fetchPokemonBySpecies', () => ({
   fetchPokemonBySpecies: vi.fn(),
@@ -9,32 +12,6 @@ vi.mock('@api/fetchPokemonBySpecies', () => ({
 
 import { fetchPokemonBySpecies } from '@api/fetchPokemonBySpecies';
 const mockFetchPokemonBySpecies = vi.mocked(fetchPokemonBySpecies);
-
-const mockPokemon: BasePokemon = {
-  id: 1,
-  name: 'Bulbasaur',
-  image: 'https://example.com/bulbasaur.png',
-  types: ['grass', 'poison'],
-  abilities: ['overgrow', 'chlorophyll'],
-  height: 7,
-  weight: 69,
-  stats: [
-    { name: 'hp', value: 45 },
-    { name: 'attack', value: 49 },
-  ],
-};
-
-const mockPokemonSpecies = {
-  id: 1,
-  name: 'bulbasaur',
-  color: 'green',
-  shape: 'quadruped',
-  generation: 'generation-i',
-  description: 'A strange seed was planted on its back at birth.',
-  isLegendary: false,
-  isMythical: false,
-  genus: 'Seed Pokémon',
-};
 
 describe('CardDetail', () => {
   beforeEach(() => {
@@ -57,13 +34,17 @@ describe('CardDetail', () => {
     render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
 
     await waitFor(() => {
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument();
+      expect(
+        screen.getByText(mockPokemon.name.toUpperCase())
+      ).toBeInTheDocument();
     });
 
-    expect(screen.getByText('#1')).toBeInTheDocument();
+    expect(screen.getByText(`#${mockPokemon.id}`)).toBeInTheDocument();
     expect(screen.getByText('Types')).toBeInTheDocument();
-    expect(screen.getByText('GRASS')).toBeInTheDocument();
-    expect(screen.getByText('POISON')).toBeInTheDocument();
+
+    mockPokemon.types.forEach((type) => {
+      expect(screen.getByText(type.toUpperCase())).toBeInTheDocument();
+    });
     expect(screen.getByText('Description')).toBeInTheDocument();
     expect(
       screen.getByText('A strange seed was planted on its back at birth.')
@@ -77,7 +58,7 @@ describe('CardDetail', () => {
     render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
 
     await waitFor(() => {
-      const image = screen.getByAltText('Bulbasaur');
+      const image = screen.getByAltText(mockPokemon.name);
       expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute('src', mockPokemon.image);
     });
@@ -90,7 +71,9 @@ describe('CardDetail', () => {
     render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
 
     await waitFor(() => {
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument();
+      expect(
+        screen.getByText(mockPokemon.name.toUpperCase())
+      ).toBeInTheDocument();
     });
 
     const closeButton = screen.getByRole('button');
@@ -141,14 +124,14 @@ describe('CardDetail', () => {
     );
 
     await waitFor(() => {
-      expect(mockFetchPokemonBySpecies).toHaveBeenCalledWith('Bulbasaur');
+      expect(mockFetchPokemonBySpecies).toHaveBeenCalledWith(mockPokemon.name);
     });
 
     const newPokemon = { ...mockPokemon, name: 'Charmander', id: 4 };
     rerender(<CardDetail pokemon={newPokemon} onClose={mockOnClose} />);
 
     await waitFor(() => {
-      expect(mockFetchPokemonBySpecies).toHaveBeenCalledWith('Charmander');
+      expect(mockFetchPokemonBySpecies).toHaveBeenCalledWith(newPokemon.name);
     });
 
     expect(mockFetchPokemonBySpecies).toHaveBeenCalledTimes(2);

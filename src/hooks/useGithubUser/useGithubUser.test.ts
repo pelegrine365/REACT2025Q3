@@ -2,7 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getGithubUser } from '@services/githubService/githubService';
 import { useGithubUser } from '@hooks/useGithubUser';
-import type { GithubUser } from '@types';
+import { mockGithubUser } from '@mocks/github';
 
 vi.mock('@services/githubService/githubService', () => ({
   getGithubUser: vi.fn(),
@@ -11,12 +11,6 @@ vi.mock('@services/githubService/githubService', () => ({
 const mockGetGithubUser = vi.mocked(getGithubUser);
 
 describe('useGithubUser', () => {
-  const mockGithubUser: GithubUser = {
-    name: 'Test User',
-    avatarURL: 'https://github.com/pelegrine365',
-    userURL: 'https://github.com/pelegrine365',
-  };
-
   beforeEach(() => {
     vi.clearAllMocks();
   });

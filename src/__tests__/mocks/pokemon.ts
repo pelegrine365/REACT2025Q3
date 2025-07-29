@@ -140,3 +140,62 @@ export const mockSpeciesResponseWithoutEnglish: Partial<Response> = {
     ],
   }),
 };
+
+export const mockPokemonSpecies = {
+  id: 1,
+  name: 'bulbasaur',
+  color: 'green',
+  shape: 'quadruped',
+  generation: 'generation-i',
+  description: 'A strange seed was planted on its back at birth.',
+  isLegendary: false,
+  isMythical: false,
+  genus: 'Seed Pokémon',
+};
+
+export type SpeciesApiResponse = {
+  id: number;
+  name: string;
+  color: { name: string };
+  shape: { name: string };
+  generation: { name: string };
+  is_legendary: boolean;
+  is_mythical: boolean;
+  flavor_text_entries: Array<{
+    flavor_text: string;
+    language: { name: string };
+  }>;
+  genera: Array<{ genus: string; language: { name: string } }>;
+};
+
+export const baseSpeciesApiResponse: SpeciesApiResponse = {
+  id: 0,
+  name: '',
+  color: { name: '' },
+  shape: { name: '' },
+  generation: { name: '' },
+  is_legendary: false,
+  is_mythical: false,
+  flavor_text_entries: [],
+  genera: [],
+};
+
+export function createSpeciesApiResponse(
+  overrides: Partial<SpeciesApiResponse>
+): SpeciesApiResponse {
+  return { ...baseSpeciesApiResponse, ...overrides };
+}
+
+export const mockBulbasaurSpeciesApiResponse = createSpeciesApiResponse({
+  id: 1,
+  name: 'bulbasaur',
+  color: { name: 'green' },
+  shape: { name: 'quadruped' },
+  generation: { name: 'generation-i' },
+  is_legendary: true,
+  is_mythical: false,
+  flavor_text_entries: [
+    { flavor_text: 'Seed Pokémon.', language: { name: 'en' } },
+  ],
+  genera: [{ genus: 'Seed Pokémon', language: { name: 'en' } }],
+});

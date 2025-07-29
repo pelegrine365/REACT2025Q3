@@ -1,22 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import CardItem from './index';
-import type { BasePokemon } from '@types';
+import { mockPokemon } from '@mocks/pokemon';
 
-const mockPokemon: BasePokemon = {
-  id: 79,
-  name: 'Slowpoke',
-  image:
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/79.png',
-  types: ['water', 'psychic'],
-  abilities: ['oblivious', 'own-tempo'],
-  height: 12,
-  weight: 360,
-  stats: [
-    { name: 'hp', value: 90 },
-    { name: 'attack', value: 65 },
-  ],
-};
+import CardItem from './index';
 
 const mockOnCardClick = vi.fn();
 

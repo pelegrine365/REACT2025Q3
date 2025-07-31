@@ -9,13 +9,13 @@ interface CardItemProps {
 
 const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
   const { id, name, image } = pokemon;
-  const [imageError, setImageError] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
 
   const handleImageError = () => {
-    setImageError(true);
+    setHasImageError(true);
   };
 
-  const shouldShowFallback = imageError || !image || image.trim() === '';
+  const shouldShowFallback = hasImageError || !image || image.trim() === '';
 
   return (
     <div className="card" onClick={() => onCardClick(id)}>

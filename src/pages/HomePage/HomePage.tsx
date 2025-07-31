@@ -19,7 +19,7 @@ import './index.css';
 const HomePage = () => {
   const [paginationData, setPaginationData] =
     useState<PaginatedPokemonListResponse | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedPokemon, setSelectedPokemon] = useState<BasePokemon | null>(
@@ -33,7 +33,7 @@ const HomePage = () => {
   const detailsId = searchParams.get('details');
 
   const fetchPokemons = async (query: string, page: number) => {
-    setLoading(true);
+    setIsLoading(true);
     setHasError(false);
 
     try {
@@ -46,7 +46,7 @@ const HomePage = () => {
       );
       setPaginationData(null);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -111,11 +111,11 @@ const HomePage = () => {
       </div>
 
       <div className="main">
-        {loading && <Spinner />}
+        {isLoading && <Spinner />}
 
         {hasError && <ErrorMessage message={errorMessage} />}
 
-        {!loading && !hasError && paginationData && (
+        {!isLoading && !hasError && paginationData && (
           <>
             <TwoColumnLayout
               isDetailOpen={!!selectedPokemon}

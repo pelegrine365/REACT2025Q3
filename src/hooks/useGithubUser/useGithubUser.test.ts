@@ -20,7 +20,7 @@ describe('useGithubUser', () => {
 
     expect(result.current.avatarURL).toBe('');
     expect(result.current.userURL).toBe('');
-    expect(result.current.loading).toBe(true);
+    expect(result.current.isLoading).toBe(true);
     expect(result.current.error).toBe(null);
   });
 
@@ -37,10 +37,10 @@ describe('useGithubUser', () => {
 
     const { result } = renderHook(() => useGithubUser('testuser'));
 
-    expect(result.current.loading).toBe(true);
+    expect(result.current.isLoading).toBe(true);
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
     expect(mockGetGithubUser).toHaveBeenCalledWith('testuser');
@@ -55,10 +55,10 @@ describe('useGithubUser', () => {
 
     const { result } = renderHook(() => useGithubUser('user_not_found'));
 
-    expect(result.current.loading).toBe(true);
+    expect(result.current.isLoading).toBe(true);
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
     expect(result.current.avatarURL).toBe('');
@@ -83,7 +83,7 @@ describe('useGithubUser', () => {
     rerender({ userName: 'successuser' });
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
     expect(result.current.error).toBe(null);

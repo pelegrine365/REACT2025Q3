@@ -21,7 +21,7 @@ describe('AboutPage', () => {
     const defaultMockData = {
       avatarURL: MOCK_AVATAR_URL,
       userURL: MOCK_USER_URL,
-      loading: false,
+      isLoading: false,
       error: null,
       ...mockData,
     };
@@ -55,7 +55,7 @@ describe('AboutPage', () => {
     renderAboutPage({
       avatarURL: '',
       userURL: '',
-      loading: true,
+      isLoading: true,
     });
 
     expect(screen.getByRole('status')).toBeInTheDocument();

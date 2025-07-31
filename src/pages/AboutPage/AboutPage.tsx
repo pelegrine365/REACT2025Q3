@@ -5,7 +5,7 @@ import Spinner from '@components/Spinner';
 import './index.css';
 
 const About = () => {
-  const { avatarURL, userURL, loading, error } =
+  const { avatarURL, userURL, isLoading, error } =
     useGithubUser(AUTHOR_GITHUB_NAME);
   return (
     <div className="about-page">
@@ -27,7 +27,7 @@ const About = () => {
               </p>
             </div>
 
-            {loading || error ? (
+            {isLoading || error ? (
               <Spinner />
             ) : (
               <>

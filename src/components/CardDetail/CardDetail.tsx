@@ -10,18 +10,18 @@ interface CardDetailProps {
 }
 
 const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
-  const [imageError, setImageError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [hasImageError, setHasImageError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [details, setDetails] = useState<PokemonSpecies | null>(null);
 
   const { id, name, image, types, abilities, height, weight, stats } = pokemon;
 
-  const shouldShowFallback = imageError || !image || image.trim() === '';
+  const shouldShowFallback = hasImageError || !image || image.trim() === '';
 
   const handleImageError = () => {
-    setImageError(true);
+    setHasImageError(true);
   };
 
   useEffect(() => {
@@ -36,17 +36,17 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
   }, [onClose]);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     setDetails(null);
     setHasError(false);
     setErrorMessage('');
-    setImageError(false);
+    setHasImageError(false);
 
     fetchPokemonDetails(name);
   }, [name]);
 
   const fetchPokemonDetails = async (name: string) => {
-    setLoading(true);
+    setIsLoading(true);
     setHasError(false);
 
     try {
@@ -61,14 +61,14 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
       setHasError(true);
       setErrorMessage(message);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
     <>
-      {loading && <Spinner />}
-      {!loading && hasError && (
+      {isLoading && <Spinner />}
+      {!isLoading && hasError && (
         <div className="card-detail">
           <div className="card-detail-header">
             <h2 className="card-detail-title">Error</h2>
@@ -86,7 +86,7 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
           </div>
         </div>
       )}
-      {!loading && !hasError && (
+      {!isLoading && !hasError && (
         <div className="card-detail">
           <div className="card-detail-header">
             <h2 className="card-detail-title">

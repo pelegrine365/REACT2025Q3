@@ -7,38 +7,6 @@
   min-height: 100%;
 }
 
-.header {
-  background-color: var(--pokemon-beige);
-  box-sizing: border-box;
-  border-bottom: none;
-  padding: 2rem 0 1rem 0;
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.theme-dark .header {
-  background-color: var(--theme-dark-bg-primary);
-}
-
-.about-page h1 {
-  font-family: 'Pokemon Solid', sans-serif;
-  color: var(--pokemon-yellow);
-  font-size: 3.5rem;
-  letter-spacing: 5px;
-  margin: 0;
-  text-shadow:
-    -4px -4px 0 var(--pokemon-black),
-    4px -4px 0 var(--pokemon-black),
-    -4px 4px 0 var(--pokemon-black),
-    4px 4px 0 var(--pokemon-black),
-    8px 8px 0 var(--pokemon-blue),
-    0 0 20px var(--pokemon-glow);
-  position: relative;
-  z-index: 1;
-}
-
 .about-page .main {
   flex: 1;
   padding: 1rem 1rem 2rem 1rem;
@@ -188,11 +156,6 @@
 @media (max-width: 768px) {
   .about {
     padding: 1rem 0.5rem;
-  }
-
-  .about__header h1 {
-    font-size: 2rem;
-    letter-spacing: 2px;
   }
 
   .about__section {

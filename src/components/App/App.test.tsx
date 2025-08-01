@@ -1,96 +1,78 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import {
+  createMemoryRouter,
+  RouterProvider,
+  type RouteObject,
+} from 'react-router-dom';
 import App from './App';
-import * as storage from '@api/searchQueryApi';
-import * as service from '@services/pokemonService';
-import { mockPokemonList } from '@mocks/pokemon';
 
-vi.mock('@components/CardList', () => ({
-  default: ({ results }: { results: typeof mockPokemonList }) => (
-    <div>
-      {results.map((pokemon) => (
-        <div key={pokemon.id} data-testid="card-item">
-          {pokemon.name}
-        </div>
-      ))}
-    </div>
+vi.mock('@components/Navigation', () => ({
+  default: () => <div data-testid="navigation" />,
+}));
+vi.mock('@components/Header', () => ({
+  default: ({ title }: { title: string }) => (
+    <div data-testid="header">{title}</div>
   ),
 }));
 
-vi.mock('@components/Pagination', () => ({
-  default: () => <div data-testid="pagination">Pagination</div>,
-}));
+const renderWithRouter = (routes: RouteObject[]) => {
+  const router = createMemoryRouter(routes, { initialEntries: ['/'] });
+  return render(<RouterProvider router={router} />);
+};
 
-describe('App component', () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
-    vi.stubGlobal('fetch', vi.fn());
+describe('App layout component', () => {
+  it('renders navigation', () => {
+    renderWithRouter([
+      {
+        path: '/',
+        element: <App />,
+        children: [{ index: true, element: <div>Home</div> }],
+      },
+    ]);
+
+    expect(screen.getByTestId('navigation')).toBeInTheDocument();
   });
 
-  it('renders SearchBar with saved value', async () => {
-    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
-    vi.spyOn(service, 'getPokemonsPaginatedList').mockResolvedValue({
-      results: [mockPokemonList[0]],
-      totalCount: 1,
-      hasNext: false,
-      hasPrev: false,
-      currentPage: 1,
-      totalPages: 1,
-    });
+  it('renders header when route has title handle', () => {
+    renderWithRouter([
+      {
+        path: '/',
+        element: <App />,
+        children: [
+          {
+            index: true,
+            element: <div>Home</div>,
+            handle: { title: 'Test Title' },
+          },
+        ],
+      },
+    ]);
 
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('pikachu')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('header')).toHaveTextContent('Test Title');
   });
 
-  it('clears saved value on empty search', async () => {
-    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
-    const clearSpy = vi.spyOn(storage, 'removeSearchQuery');
-    vi.spyOn(service, 'getPokemonsPaginatedList').mockResolvedValue({
-      results: mockPokemonList,
-      totalCount: 1010,
-      hasNext: true,
-      hasPrev: false,
-      currentPage: 1,
-      totalPages: 101,
-    });
+  it('does not render header when no title in handle', () => {
+    renderWithRouter([
+      {
+        path: '/',
+        element: <App />,
+        children: [{ index: true, element: <div>Home</div> }],
+      },
+    ]);
 
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-
-    const input = screen.getByPlaceholderText('Write the request...');
-    fireEvent.change(input, { target: { value: '' } });
-    fireEvent.click(screen.getByText('Search'));
-
-    await waitFor(() => {
-      expect(clearSpy).toHaveBeenCalled();
-    });
+    expect(screen.queryByTestId('header')).not.toBeInTheDocument();
   });
 
-  it('shows error message on API failure', async () => {
-    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('');
-    vi.spyOn(service, 'getPokemonsPaginatedList').mockRejectedValue(
-      new Error('API call failed')
-    );
+  it('renders main element for content', () => {
+    renderWithRouter([
+      {
+        path: '/',
+        element: <App />,
+        children: [{ index: true, element: <div>Home</div> }],
+      },
+    ]);
 
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('API call failed')).toBeInTheDocument();
-    });
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 });

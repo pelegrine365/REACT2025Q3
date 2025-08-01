@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import { Route, Routes } from 'react-router';
+import { Outlet, useMatches } from 'react-router';
 import { ThemeContext } from 'contexts';
 
-import HomePage from '@pages/HomePage';
-import AboutPage from '@pages/AboutPage';
-import NotFoundPage from '@pages/NotFoundPage';
-
 import Navigation from '@components/Navigation';
-import ErrorBoundary from '@components/ErrorBoundary';
 import ThemeButton from '@components/ThemeButton';
 
 import { THEME_DAY } from '@constants';
+import Header from '@components/Header';
 
-import './index.css';
+type RouteHandle = {
+  title?: string;
+};
 
 interface ThemeContext {
   theme: string;
@@ -20,23 +18,24 @@ interface ThemeContext {
 }
 
 const App = () => {
+  const matches = useMatches();
+  const matchWithTitle = [...matches]
+    .reverse()
+    .find((match) => (match.handle as RouteHandle)?.title);
+  const title = (matchWithTitle?.handle as RouteHandle)?.title || '';
   const [theme, setTheme] = useState(THEME_DAY);
+
   return (
-    <ErrorBoundary>
-      <ThemeContext value={{ theme, setTheme }}>
-        <div className={`app-container theme-${theme}`}>
-          <Navigation />
-          <ThemeButton />
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
-        </div>
-      </ThemeContext>
-    </ErrorBoundary>
+    <ThemeContext value={{ theme, setTheme }}>
+      <div className={`app-container theme-${theme}`}>
+        <Navigation />
+        <ThemeButton />
+        {title && <Header title={title} />}
+        <main>
+          <Outlet />
+        </main>
+      </div>
+    </ThemeContext>
   );
 };
 

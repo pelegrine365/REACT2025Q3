@@ -8,15 +8,11 @@ import './index.css';
 
 const About = () => {
   const { theme } = useContext(ThemeContext);
-  const { avatarURL, userURL, loading, error } =
+  const { avatarURL, userURL, isLoading, error } =
     useGithubUser(AUTHOR_GITHUB_NAME);
 
   return (
     <div className={`about-page theme-${theme}`}>
-      <div className="header">
-        <h1>About Pokemon Cards</h1>
-      </div>
-
       <div className="main">
         <div className="about__container">
           <div className="about__content">
@@ -31,7 +27,7 @@ const About = () => {
               </p>
             </div>
 
-            {loading || error ? (
+            {isLoading || error ? (
               <Spinner />
             ) : (
               <>

@@ -3,14 +3,3 @@
   flex-direction: column;
   min-height: 100vh;
 }
-
-html {
-  scroll-behavior: smooth;
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: 60px;
-}

@@ -9,8 +9,6 @@ import type { BasePokemon } from '@types';
 const createMockResponse = (responseInit: Partial<Response>): Response => {
   return {
     ok: true,
-    status: 200,
-    statusText: 'OK',
     ...responseInit,
   } as Response;
 };

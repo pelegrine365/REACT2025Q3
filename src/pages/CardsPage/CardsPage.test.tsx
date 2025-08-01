@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router';
-import HomePage from './HomePage';
+import CardsPage from '.';
 import * as storage from '@api/searchQueryApi';
 import * as service from '@services/pokemonService';
 import { mockPokemonList } from '@mocks/pokemon';
@@ -26,7 +26,7 @@ const renderWithRouter = (component: React.ReactElement) => {
   return render(<BrowserRouter>{component}</BrowserRouter>);
 };
 
-describe('HomePage component', () => {
+describe('CardsPage component', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
     vi.stubGlobal('fetch', vi.fn());
@@ -43,7 +43,7 @@ describe('HomePage component', () => {
       totalPages: 1,
     });
 
-    renderWithRouter(<HomePage />);
+    renderWithRouter(<CardsPage />);
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('pikachu')).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('HomePage component', () => {
       totalPages: 101,
     });
 
-    renderWithRouter(<HomePage />);
+    renderWithRouter(<CardsPage />);
 
     const input = screen.getByPlaceholderText('Write the request...');
     fireEvent.change(input, { target: { value: '' } });
@@ -79,7 +79,7 @@ describe('HomePage component', () => {
       new Error('API call failed')
     );
 
-    renderWithRouter(<HomePage />);
+    renderWithRouter(<CardsPage />);
 
     await waitFor(() => {
       expect(screen.getByText('API call failed')).toBeInTheDocument();

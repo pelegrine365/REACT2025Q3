@@ -17,11 +17,11 @@ import type { BasePokemon, PaginatedPokemonListResponse } from '@types';
 
 import './index.css';
 
-const HomePage = () => {
+const CardsPage = () => {
   const { theme } = useContext(ThemeContext);
   const [paginationData, setPaginationData] =
     useState<PaginatedPokemonListResponse | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedPokemon, setSelectedPokemon] = useState<BasePokemon | null>(
@@ -35,7 +35,7 @@ const HomePage = () => {
   const detailsId = searchParams.get('details');
 
   const fetchPokemons = async (query: string, page: number) => {
-    setLoading(true);
+    setIsLoading(true);
     setHasError(false);
 
     try {
@@ -48,7 +48,7 @@ const HomePage = () => {
       );
       setPaginationData(null);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -103,21 +103,12 @@ const HomePage = () => {
   }, [detailsId, paginationData]);
 
   return (
-    <div className={`home-page theme-${theme}`}>
-      <div className="header">
-        <h1>Pokemons Cards</h1>
-      </div>
-
-      <div className="search-bar-container">
-        <SearchBar onSearch={handleSearch} searchValue={searchQuery} />
-      </div>
-
+    <div className={`cards-page theme-${theme}`}>
+      <SearchBar onSearch={handleSearch} searchValue={searchQuery} />
       <div className="main">
-        {loading && <Spinner />}
-
+        {isLoading && <Spinner />}
         {hasError && <ErrorMessage message={errorMessage} />}
-
-        {!loading && !hasError && paginationData && (
+        {!isLoading && !hasError && paginationData && (
           <>
             <TwoColumnLayout
               isDetailOpen={!!selectedPokemon}
@@ -152,4 +143,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default CardsPage;

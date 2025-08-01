@@ -6,6 +6,10 @@
   padding: 2rem;
 }
 
+.theme-dark .error-page {
+  background-color: var(--theme-dark-bg-primary);
+}
+
 .error-card {
   background: var(--pokemon-white);
   border-radius: 16px;

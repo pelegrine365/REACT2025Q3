@@ -5,7 +5,7 @@ import type { GithubUser } from '@types';
 export const useGithubUser = (userName: string) => {
   const [avatarURL, setAvatarURL] = useState('');
   const [userURL, setUserURL] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export const useGithubUser = (userName: string) => {
     let canceled = false;
 
     const fetchData = async (name: string) => {
-      setLoading(true);
+      setIsLoading(true);
       setError(null);
       try {
         const data: GithubUser = await getGithubUser(name);
@@ -24,7 +24,7 @@ export const useGithubUser = (userName: string) => {
       } catch (error) {
         setError(error instanceof Error ? error.message : String(error));
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -35,5 +35,5 @@ export const useGithubUser = (userName: string) => {
     };
   }, [userName]);
 
-  return { avatarURL, userURL, loading, error };
+  return { avatarURL, userURL, isLoading, error };
 };

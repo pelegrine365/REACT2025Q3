@@ -2,7 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getGithubUser } from '@services/githubService/githubService';
 import { useGithubUser } from '@hooks/useGithubUser';
-import type { GithubUser } from '@types';
+import { mockGithubUser } from '@mocks/github';
 
 vi.mock('@services/githubService/githubService', () => ({
   getGithubUser: vi.fn(),
@@ -11,12 +11,6 @@ vi.mock('@services/githubService/githubService', () => ({
 const mockGetGithubUser = vi.mocked(getGithubUser);
 
 describe('useGithubUser', () => {
-  const mockGithubUser: GithubUser = {
-    name: 'Test User',
-    avatarURL: 'https://github.com/pelegrine365',
-    userURL: 'https://github.com/pelegrine365',
-  };
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -26,7 +20,7 @@ describe('useGithubUser', () => {
 
     expect(result.current.avatarURL).toBe('');
     expect(result.current.userURL).toBe('');
-    expect(result.current.loading).toBe(true);
+    expect(result.current.isLoading).toBe(true);
     expect(result.current.error).toBe(null);
   });
 
@@ -43,10 +37,10 @@ describe('useGithubUser', () => {
 
     const { result } = renderHook(() => useGithubUser('testuser'));
 
-    expect(result.current.loading).toBe(true);
+    expect(result.current.isLoading).toBe(true);
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
     expect(mockGetGithubUser).toHaveBeenCalledWith('testuser');
@@ -61,10 +55,10 @@ describe('useGithubUser', () => {
 
     const { result } = renderHook(() => useGithubUser('user_not_found'));
 
-    expect(result.current.loading).toBe(true);
+    expect(result.current.isLoading).toBe(true);
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
     expect(result.current.avatarURL).toBe('');
@@ -89,7 +83,7 @@ describe('useGithubUser', () => {
     rerender({ userName: 'successuser' });
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
     expect(result.current.error).toBe(null);

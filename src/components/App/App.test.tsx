@@ -1,20 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { render, screen } from '@testing-library/react';
 import App from './App';
-import * as storage from '@api/searchQueryApi';
-import * as service from '@services/pokemonService';
-import { mockPokemonList } from '@mocks/pokemon';
+import * as router from 'react-router-dom';
 
-vi.mock('@components/CardList', () => ({
-  default: ({ results }: { results: typeof mockPokemonList }) => (
-    <div>
-      {results.map((pokemon) => (
-        <div key={pokemon.id} data-testid="card-item">
-          {pokemon.name}
-        </div>
-      ))}
-    </div>
+vi.mock('react-router-dom', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom'
+    );
+  return {
+    ...actual,
+    useMatches: vi.fn(),
+  };
+});
+
+vi.mock('@components/Navigation', () => ({
+  default: () => <div data-testid="navigation" />,
+}));
+vi.mock('@components/Header', () => ({
+  default: ({ title }: { title: string }) => (
+    <div data-testid="header">{title}</div>
   ),
 }));
 
@@ -22,75 +27,44 @@ vi.mock('@components/Pagination', () => ({
   default: () => <div data-testid="pagination">Pagination</div>,
 }));
 
-describe('App component', () => {
+describe('App layout component', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.stubGlobal('fetch', vi.fn());
   });
 
-  it('renders SearchBar with saved value', async () => {
-    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
-    vi.spyOn(service, 'getPokemonsPaginatedList').mockResolvedValue({
-      results: [mockPokemonList[0]],
-      totalCount: 1,
-      hasNext: false,
-      hasPrev: false,
-      currentPage: 1,
-      totalPages: 1,
+  it('always renders navigation', () => {
+    Object.defineProperty(router, 'useMatches', {
+      configurable: true,
+      value: () => [],
     });
-
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('pikachu')).toBeInTheDocument();
-    });
+    render(<App />);
+    expect(screen.getByTestId('navigation')).toBeInTheDocument();
   });
 
-  it('clears saved value on empty search', async () => {
-    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('pikachu');
-    const clearSpy = vi.spyOn(storage, 'removeSearchQuery');
-    vi.spyOn(service, 'getPokemonsPaginatedList').mockResolvedValue({
-      results: mockPokemonList,
-      totalCount: 1010,
-      hasNext: true,
-      hasPrev: false,
-      currentPage: 1,
-      totalPages: 101,
+  it('renders header when route handle has title', () => {
+    Object.defineProperty(router, 'useMatches', {
+      configurable: true,
+      value: () => [{ handle: {} }, { handle: { title: 'My Page' } }],
     });
-
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-
-    const input = screen.getByPlaceholderText('Write the request...');
-    fireEvent.change(input, { target: { value: '' } });
-    fireEvent.click(screen.getByText('Search'));
-
-    await waitFor(() => {
-      expect(clearSpy).toHaveBeenCalled();
-    });
+    render(<App />);
+    expect(screen.getByTestId('header')).toHaveTextContent('My Page');
   });
 
-  it('shows error message on API failure', async () => {
-    vi.spyOn(storage, 'getSearchQuery').mockReturnValue('');
-    vi.spyOn(service, 'getPokemonsPaginatedList').mockRejectedValue(
-      new Error('API call failed')
-    );
-
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('API call failed')).toBeInTheDocument();
+  it('does not render header when no title in route handle', () => {
+    Object.defineProperty(router, 'useMatches', {
+      configurable: true,
+      value: () => [{ handle: {} }],
     });
+    render(<App />);
+    expect(screen.queryByTestId('header')).toBeNull();
+  });
+
+  it('renders main element for content', () => {
+    Object.defineProperty(router, 'useMatches', {
+      configurable: true,
+      value: () => [],
+    });
+    render(<App />);
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 });

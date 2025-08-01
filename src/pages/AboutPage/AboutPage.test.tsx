@@ -34,23 +34,6 @@ describe('AboutPage', () => {
     vi.clearAllMocks();
   });
 
-  it('should render app description and main heading', () => {
-    renderAboutPage({
-      avatarURL: MOCK_AUTHOR_AVATAR_URL,
-      userURL: MOCK_AUTHOR_USER_URL,
-    });
-
-    expect(
-      screen.getByRole('heading', { name: /about pokemon cards/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        /this pokemon cards application is a modern react application/i
-      )
-    ).toBeInTheDocument();
-    expect(screen.getByText(/built with typescript/i)).toBeInTheDocument();
-  });
-
   it('should show Spinner when loading', () => {
     renderAboutPage({
       avatarURL: '',
@@ -162,7 +145,6 @@ describe('AboutPage', () => {
 
     expect(document.querySelector('.about-page')).toBeInTheDocument();
     expect(document.querySelector('.about__container')).toBeInTheDocument();
-    expect(document.querySelector('.header')).toBeInTheDocument();
     expect(document.querySelector('.about__content')).toBeInTheDocument();
   });
 });

@@ -16,7 +16,7 @@ import type { BasePokemon, PaginatedPokemonListResponse } from '@types';
 
 import './index.css';
 
-const HomePage = () => {
+const CardsPage = () => {
   const [paginationData, setPaginationData] =
     useState<PaginatedPokemonListResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -102,19 +102,10 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <div className="header">
-        <h1>Pokemons Cards</h1>
-      </div>
-
-      <div className="search-bar-container">
-        <SearchBar onSearch={handleSearch} searchValue={searchQuery} />
-      </div>
-
+      <SearchBar onSearch={handleSearch} searchValue={searchQuery} />
       <div className="main">
         {isLoading && <Spinner />}
-
         {hasError && <ErrorMessage message={errorMessage} />}
-
         {!isLoading && !hasError && paginationData && (
           <>
             <TwoColumnLayout
@@ -150,4 +141,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default CardsPage;

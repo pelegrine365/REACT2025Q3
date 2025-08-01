@@ -9,10 +9,6 @@ const About = () => {
     useGithubUser(AUTHOR_GITHUB_NAME);
   return (
     <div className="about-page">
-      <div className="header">
-        <h1>About Pokemon Cards</h1>
-      </div>
-
       <div className="main">
         <div className="about__container">
           <div className="about__content">

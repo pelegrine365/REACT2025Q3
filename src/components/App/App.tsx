@@ -1,26 +1,26 @@
+import Header from '@components/Header';
 import Navigation from '@components/Navigation';
-import { Route, Routes } from 'react-router';
-import HomePage from '@pages/HomePage';
-import AboutPage from '@pages/AboutPage';
-import NotFoundPage from '@pages/NotFoundPage';
-import ErrorBoundary from '@components/ErrorBoundary';
+import { Outlet, useMatches } from 'react-router-dom';
 
-import './index.css';
+type RouteHandle = {
+  title?: string;
+};
 
 const App = () => {
+  const matches = useMatches();
+  const matchWithTitle = [...matches]
+    .reverse()
+    .find((match) => (match.handle as RouteHandle)?.title);
+  const title = (matchWithTitle?.handle as RouteHandle)?.title || '';
+
   return (
-    <ErrorBoundary>
-      <div className="app-container">
-        <Navigation />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </main>
-      </div>
-    </ErrorBoundary>
+    <div className="app-container">
+      <Navigation />
+      {title && <Header title={title} />}
+      <main>
+        <Outlet />
+      </main>
+    </div>
   );
 };
 

@@ -4,14 +4,3 @@
   min-height: 100vh;
   background-color: var(--pokemon-white);
 }
-
-html {
-  scroll-behavior: smooth;
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: 60px;
-}

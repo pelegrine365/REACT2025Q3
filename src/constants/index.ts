@@ -6,3 +6,8 @@ export const MAX_POKEMON_ID = 900;
 export const AUTHOR_GITHUB_NAME = 'pelegrine365';
 
 export const API_BASE_URL = 'https://pokeapi.co/api/v2';
+
+export const CARDS_PAGE_TITLE = 'Pokemons Cards';
+export const ABOUT_PAGE_TITLE = 'About Pokemons Card Application';
+export const NOT_FOUND_PAGE_TITLE = 'Page Not Found';
+export const ERROR_MESSAGE = 'Something went wrong. Please try again later.';

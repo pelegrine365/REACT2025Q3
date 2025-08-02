@@ -12,11 +12,6 @@ type RouteHandle = {
   title?: string;
 };
 
-interface ThemeContext {
-  theme: string;
-  setTheme: () => void;
-}
-
 const App = () => {
   const matches = useMatches();
   const matchWithTitle = [...matches]
@@ -26,7 +21,7 @@ const App = () => {
   const [theme, setTheme] = useState(THEME_DAY);
 
   return (
-    <ThemeContext value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       <div className={`app-container theme-${theme}`}>
         <Navigation />
         <ThemeButton />
@@ -35,7 +30,7 @@ const App = () => {
           <Outlet />
         </main>
       </div>
-    </ThemeContext>
+    </ThemeContext.Provider>
   );
 };
 

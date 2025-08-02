@@ -9,7 +9,7 @@
   border-radius: 50%;
   border: 0.15rem solid var(--pokemon-blue);
   color: var(--pokemon-blue);
-  background: url('/moon.svg') no-repeat center;
+  background: var(--dark-surface) url('/moon.svg') no-repeat center;
   background-size: 24px 24px;
   cursor: pointer;
   z-index: 1000;
@@ -19,17 +19,20 @@
 .theme-button:hover {
   background-size: 28px 28px;
   transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .theme-dark .theme-button {
+  background: var(--dark-surface) url('/sun.svg') no-repeat center;
   background-size: 24px 24px;
-  background: url('/sun.svg') no-repeat center;
   border: 0.15rem solid var(--pokemon-yellow);
+  color: var(--pokemon-yellow);
 }
 
 .theme-dark .theme-button:hover {
   background-size: 28px 28px;
   outline: none;
+  box-shadow: 0 2px 8px rgba(255, 222, 0, 0.4);
 }
 
 @media (max-width: 768px) {

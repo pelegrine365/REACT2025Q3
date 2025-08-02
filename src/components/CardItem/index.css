@@ -28,6 +28,18 @@
   background: rgba(255, 255, 255, 1);
 }
 
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.checkbox-input:focus + .pokeball-icon {
+  filter: drop-shadow(0 0 0 2px var(--pokemon-blue));
+}
+
 .pokeball-icon {
   width: 1.5rem;
   height: 1.5rem;
@@ -35,7 +47,8 @@
   opacity: 0.08;
 }
 
-.pokeball-icon.checked {
+.pokeball-icon.checked,
+.checkbox-input:checked + .pokeball-icon {
   opacity: 1;
 }
 

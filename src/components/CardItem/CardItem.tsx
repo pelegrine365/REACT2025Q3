@@ -19,22 +19,28 @@ const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
     setHasImageError(true);
   };
 
-  const handleCheckboxClick = (e: React.MouseEvent) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
-    setIsChecked(!isChecked);
+    setIsChecked(e.target.checked);
   };
 
   const shouldShowFallback = hasImageError || !image || image.trim() === '';
 
   return (
     <div className={`card theme-${theme}`} onClick={() => onCardClick(id)}>
-      <div className="card-checkbox" onClick={handleCheckboxClick}>
+      <label className="card-checkbox" onClick={(e) => e.stopPropagation()}>
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          className="checkbox-input"
+        />
         <img
           src="/pokeball.svg"
           alt="pokeball"
           className={`pokeball-icon ${isChecked ? 'checked' : ''}`}
         />
-      </div>
+      </label>
       <div className="card-header">
         <div className="card-image">
           {shouldShowFallback ? (

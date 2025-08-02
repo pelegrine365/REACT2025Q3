@@ -1,5 +1,8 @@
-import type { BasePokemon } from '@types';
 import { useContext, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from 'store';
+import { addSelectedItem, removeSelectedItem } from 'store/selectedItemsSlice';
+import type { BasePokemon } from '@types';
 import { ThemeContext } from 'contexts';
 
 import './index.css';
@@ -10,10 +13,13 @@ interface CardItemProps {
 }
 
 const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
+  const dispatch = useDispatch();
+  const isSelected = useSelector((state: RootState) =>
+    state.selectedItems.selectedItems.some((item) => item.id === pokemon.id)
+  );
   const { id, name, image } = pokemon;
   const { theme } = useContext(ThemeContext);
   const [hasImageError, setHasImageError] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const handleImageError = () => {
     setHasImageError(true);
@@ -21,24 +27,32 @@ const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
-    setIsChecked(e.target.checked);
+    if (e.target.checked) {
+      dispatch(addSelectedItem(pokemon));
+    } else {
+      dispatch(removeSelectedItem(id));
+    }
   };
 
   const shouldShowFallback = hasImageError || !image || image.trim() === '';
 
   return (
-    <div className={`card theme-${theme}`} onClick={() => onCardClick(id)}>
+    <div
+      className={`card theme-${theme}`}
+      onClick={() => onCardClick(id)}
+      data-testid="pokemon-card"
+    >
       <label className="card-checkbox" onClick={(e) => e.stopPropagation()}>
         <input
           type="checkbox"
-          checked={isChecked}
+          checked={isSelected}
           onChange={handleCheckboxChange}
           className="checkbox-input"
         />
         <img
           src="/pokeball.svg"
           alt="pokeball"
-          className={`pokeball-icon ${isChecked ? 'checked' : ''}`}
+          className={`pokeball-icon ${isSelected ? 'checked' : ''}`}
         />
       </label>
       <div className="card-header">

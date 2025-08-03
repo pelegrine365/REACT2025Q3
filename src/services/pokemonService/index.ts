@@ -1,0 +1,1 @@
+export { getPokemonsPaginatedList } from './pokemonService';

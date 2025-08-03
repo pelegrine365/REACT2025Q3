@@ -1,41 +1,27 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import CardList from '../CardList';
+import { mockPokemonList } from '@mocks/pokemon';
 
-const mockPokemons = [
-  {
-    id: 26,
-    name: 'raichu',
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png',
-    description:
-      'Its long tail serves as a ground to protect itself from its own high-voltage power.',
-    types: ['electric'],
-  },
-  {
-    id: 27,
-    name: 'nidoqueen',
+import CardList from './index';
 
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/31.png',
-    description:
-      'Its hard scales provide strong protection. It uses its hefty bulk to execute powerful moves.',
-    types: ['poison', 'ground'],
-  },
-];
+const mockOnCardClick = vi.fn();
 
 describe('CardList', () => {
   it('renders correct number of pokemon cards', () => {
-    render(<CardList results={mockPokemons} />);
+    render(
+      <CardList results={mockPokemonList} onCardClick={mockOnCardClick} />
+    );
 
     const headings = screen.getAllByRole('heading', { level: 2 });
     expect(headings.length).toBe(2);
   });
 
   it('renders pokemon names and IDs', () => {
-    render(<CardList results={mockPokemons} />);
+    render(
+      <CardList results={mockPokemonList} onCardClick={mockOnCardClick} />
+    );
 
-    for (const pokemon of mockPokemons) {
+    for (const pokemon of mockPokemonList) {
       expect(
         screen.getByRole('heading', {
           name: pokemon.name.toUpperCase(),
@@ -52,24 +38,8 @@ describe('CardList', () => {
     }
   });
 
-  it('renders pokemon descriptions', () => {
-    render(<CardList results={mockPokemons} />);
-
-    expect(
-      screen.getByText(
-        'Its long tail serves as a ground to protect itself from its own high-voltage power.'
-      )
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText(
-        'Its hard scales provide strong protection. It uses its hefty bulk to execute powerful moves.'
-      )
-    ).toBeInTheDocument();
-  });
-
   it('renders no cards when results is empty', () => {
-    render(<CardList results={[]} />);
+    render(<CardList results={[]} onCardClick={mockOnCardClick} />);
 
     const headings = screen.queryAllByRole('heading', { level: 2 });
     expect(headings.length).toBe(0);

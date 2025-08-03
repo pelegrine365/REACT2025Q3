@@ -1,0 +1,1 @@
+export { fetchGithubUser } from './fetchGithubUser';

@@ -1,0 +1,1 @@
+export { getGithubUser } from './githubService';

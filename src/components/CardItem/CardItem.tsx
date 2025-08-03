@@ -1,40 +1,39 @@
-import { Component } from 'react';
-
-import type { Pokemon } from '../../types';
-
+import type { BasePokemon } from '@types';
+import { useState } from 'react';
 import './index.css';
 
-class CardItem extends Component<Pokemon> {
-  render() {
-    const { id, name, image, description, types } = this.props;
+interface CardItemProps {
+  pokemon: BasePokemon;
+  onCardClick: (pokemonId: number) => void;
+}
 
-    return (
-      <div className="card">
-        <div className="card-header">
-          <div className="card-image">
-            <img src={image} alt={name} />
-          </div>
-          <div className="card-name">
-            <h2>{name.toUpperCase()} </h2>
-            <h3 className="card-id">#{id}</h3>
-          </div>
+const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
+  const { id, name, image } = pokemon;
+  const [hasImageError, setHasImageError] = useState(false);
+
+  const handleImageError = () => {
+    setHasImageError(true);
+  };
+
+  const shouldShowFallback = hasImageError || !image || image.trim() === '';
+
+  return (
+    <div className="card" onClick={() => onCardClick(id)}>
+      <div className="card-header">
+        <div className="card-image">
+          {shouldShowFallback ? (
+            <div className="card-image-fallback">Not found</div>
+          ) : (
+            <img src={image} alt={name} onError={handleImageError} />
+          )}
         </div>
-
-        <div className="card-main">
-          <div className="card-description">
-            <p>{description}</p>
-          </div>
-          <div className="card-types">
-            {types.map((type) => (
-              <span key={type} className="type-label">
-                {type}
-              </span>
-            ))}
-          </div>
+        <div className="card-name-section">
+          <h2 className="card-name">{name?.toUpperCase() || 'UNKNOWN'}</h2>
+          <h3 className="card-id">#{id}</h3>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default CardItem;

@@ -1,23 +1,21 @@
-import { Component } from 'react';
-import type { Pokemon } from '../../types';
-import CardItem from '../CardItem';
+import type { BasePokemon } from '@types';
+import CardItem from '@components/CardItem';
 
 import './index.css';
 
 interface CardListProps {
-  results: Pokemon[];
+  results: BasePokemon[];
+  onCardClick: (pokemonId: number) => void;
 }
 
-class CardList extends Component<CardListProps> {
-  render() {
-    return (
-      <div className="card-list">
-        {this.props.results.map((result) => (
-          <CardItem key={result.id} {...result} />
-        ))}
-      </div>
-    );
-  }
-}
+const CardList = ({ results, onCardClick }: CardListProps) => {
+  return (
+    <div className="card-list">
+      {results.map((result) => (
+        <CardItem key={result.id} pokemon={result} onCardClick={onCardClick} />
+      ))}
+    </div>
+  );
+};
 
 export default CardList;

@@ -1,6 +1,9 @@
-import { StrictMode } from 'react';
+import { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './components/App/App';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router';
+import Spinner from '@components/Spinner';
+
 import './index.css';
 
 const rootElement = document.getElementById('root');
@@ -8,7 +11,9 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <App />
+      <Suspense fallback={<Spinner />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </StrictMode>
   );
 } else {

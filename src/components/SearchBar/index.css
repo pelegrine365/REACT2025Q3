@@ -1,11 +1,17 @@
 .search-bar-container {
-  margin: 2rem auto;
-  max-width: 42rem;
+  padding: 2rem;
+  margin: 0 -2rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .search-bar {
   position: relative;
   width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .search-bar input {
@@ -14,7 +20,7 @@
   font-size: 1.1rem;
   padding: 1rem 9rem 1rem 1.5rem;
   color: var(--pokemon-black);
-  background: white;
+  background: var(--pokemon-white);
   border: 3px solid var(--pokemon-black);
   border-radius: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -71,4 +77,11 @@
 
 .search-bar .clear:hover {
   background: var(--pokemon-blue);
+}
+
+@media (max-width: 640px) {
+  .search-bar-container {
+    padding: 1.5rem 1rem;
+    margin: 0 -1rem;
+  }
 }

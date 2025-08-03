@@ -7,6 +7,10 @@
   align-items: center;
 }
 
+.theme-dark .search-bar-container {
+  background-color: var(--theme-dark-bg-primary);
+}
+
 .search-bar {
   position: relative;
   width: 100%;

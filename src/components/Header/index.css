@@ -26,6 +26,22 @@
   z-index: 1;
 }
 
+.header {
+  background-color: var(--pokemon-beige);
+  box-sizing: border-box;
+  border-bottom: none;
+  padding: 2rem 0 1rem 0;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3.5rem 0 0rem;
+}
+
+.theme-dark .header {
+  background-color: var(--theme-dark-bg-primary);
+}
+
 @media (max-width: 640px) {
   .header {
     height: 120px;

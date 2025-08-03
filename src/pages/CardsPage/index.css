@@ -1,4 +1,4 @@
-.home-page {
+.cards-page {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -7,8 +7,44 @@
   padding: 0 2rem;
 }
 
+.theme-dark {
+  background-color: var(--dark-red);
+}
+
 @media (max-width: 640px) {
-  .home-page {
+  .cards-page {
     padding: 0 1rem;
   }
+}
+
+.search-bar-container {
+  padding: 2rem;
+  margin: 0 -2rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .search-bar-container {
+    padding: 1.5rem 1rem;
+    margin: 0 -1rem;
+  }
+}
+
+.main {
+  flex: 1;
+  padding: 1rem 1rem 2rem 1rem;
+  background-color: var(--pokemon-beige-transparent);
+  border-top: none;
+  border-radius: 20px 20px 0 0;
+  margin-top: 2rem;
+  min-height: calc(100vh - 300px);
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }

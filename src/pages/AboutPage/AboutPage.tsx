@@ -1,14 +1,17 @@
-import { AUTHOR_GITHUB_NAME } from '../../constants';
-import { useGithubUser } from '../../hooks/useGithubUser';
+import { AUTHOR_GITHUB_NAME } from '@constants';
+import { useGithubUser } from '@hooks/useGithubUser';
 import Spinner from '@components/Spinner';
+import { useTheme } from '@hooks/useTheme';
 
 import './index.css';
 
 const About = () => {
+  const { theme } = useTheme();
   const { avatarURL, userURL, isLoading, error } =
     useGithubUser(AUTHOR_GITHUB_NAME);
+
   return (
-    <div className="about-page">
+    <div className={`about-page theme-${theme}`}>
       <div className="main">
         <div className="about__container">
           <div className="about__content">

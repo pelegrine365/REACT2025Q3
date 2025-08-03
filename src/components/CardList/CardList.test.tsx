@@ -1,25 +1,36 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { mockPokemonList } from '@mocks/pokemon';
+import { createTestStore, TestWrapper } from '@testUtils/testUtils';
 
 import CardList from './index';
 
 const mockOnCardClick = vi.fn();
 
-describe('CardList', () => {
-  it('renders correct number of pokemon cards', () => {
-    render(
-      <CardList results={mockPokemonList} onCardClick={mockOnCardClick} />
-    );
+describe('CardList component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
-    const headings = screen.getAllByRole('heading', { level: 2 });
-    expect(headings.length).toBe(2);
+  const renderCardList = (
+    results = mockPokemonList,
+    store?: ReturnType<typeof createTestStore>
+  ) => {
+    return render(
+      <TestWrapper store={store}>
+        <CardList results={results} onCardClick={mockOnCardClick} />
+      </TestWrapper>
+    );
+  };
+  it('renders correct number of pokemon cards', () => {
+    renderCardList();
+
+    const cards = screen.getAllByTestId('pokemon-card');
+    expect(cards.length).toBe(mockPokemonList.length);
   });
 
   it('renders pokemon names and IDs', () => {
-    render(
-      <CardList results={mockPokemonList} onCardClick={mockOnCardClick} />
-    );
+    renderCardList();
 
     for (const pokemon of mockPokemonList) {
       expect(
@@ -39,9 +50,43 @@ describe('CardList', () => {
   });
 
   it('renders no cards when results is empty', () => {
-    render(<CardList results={[]} onCardClick={mockOnCardClick} />);
+    renderCardList([]);
 
-    const headings = screen.queryAllByRole('heading', { level: 2 });
-    expect(headings.length).toBe(0);
+    const cards = screen.queryAllByTestId('pokemon-card');
+    expect(cards.length).toBe(0);
+  });
+
+  it('renders checkboxes for all cards', () => {
+    renderCardList();
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes.length).toBe(mockPokemonList.length);
+
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox).not.toBeChecked();
+    });
+  });
+
+  it('calls onCardClick when card is clicked', () => {
+    renderCardList();
+
+    const firstCard = screen.getAllByTestId('pokemon-card')[0];
+    fireEvent.click(firstCard);
+
+    expect(mockOnCardClick).toHaveBeenCalledWith(mockPokemonList[0].id);
+  });
+
+  it('shows selected state when pokemon is selected in store', () => {
+    const storeWithSelectedItem = createTestStore({
+      selectedItems: {
+        selectedItems: [mockPokemonList[0]],
+      },
+    });
+
+    renderCardList(mockPokemonList, storeWithSelectedItem);
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[1]).not.toBeChecked();
   });
 });

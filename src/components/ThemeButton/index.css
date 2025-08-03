@@ -1,0 +1,64 @@
+.theme-button {
+  position: fixed;
+  border: none;
+  outline: none;
+  top: 5px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 0.15rem solid var(--pokemon-blue);
+  color: var(--pokemon-blue);
+  background: var(--dark-surface) url('/moon.svg') no-repeat center;
+  background-size: 24px 24px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.theme-button:hover {
+  background-size: 28px 28px;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.theme-dark .theme-button {
+  background: var(--dark-surface) url('/sun.svg') no-repeat center;
+  background-size: 24px 24px;
+  border: 0.15rem solid var(--pokemon-yellow);
+  color: var(--pokemon-yellow);
+}
+
+.theme-dark .theme-button:hover {
+  background-size: 28px 28px;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(255, 222, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+  .theme-button {
+    width: 45px;
+    height: 45px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .theme-button-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-button {
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .theme-button-icon {
+    width: 18px;
+    height: 18px;
+  }
+}

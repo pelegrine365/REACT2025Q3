@@ -1,4 +1,5 @@
 import { getVisiblePages } from '@utils/getVisiblePages';
+import { useTheme } from '@hooks/useTheme';
 
 import './index.css';
 
@@ -18,9 +19,10 @@ const Pagination = ({
   hasPrev,
 }: PaginationProps) => {
   const visiblePages = getVisiblePages(currentPage, totalPages);
+  const { theme } = useTheme();
 
   return (
-    <div className="pagination">
+    <div className={`pagination theme-${theme}`}>
       <button
         className="pagination-button"
         onClick={() => onPageChange(currentPage - 1)}

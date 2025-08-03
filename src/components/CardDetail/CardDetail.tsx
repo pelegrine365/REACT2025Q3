@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import './index.css';
 import { fetchPokemonBySpecies } from '@api/fetchPokemonBySpecies';
 import Spinner from '@components/Spinner';
+import { useTheme } from '@hooks/useTheme';
 
 interface CardDetailProps {
   pokemon: BasePokemon;
@@ -15,6 +16,7 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [details, setDetails] = useState<PokemonSpecies | null>(null);
+  const { theme } = useTheme();
 
   const { id, name, image, types, abilities, height, weight, stats } = pokemon;
 
@@ -69,7 +71,7 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
     <>
       {isLoading && <Spinner />}
       {!isLoading && hasError && (
-        <div className="card-detail">
+        <div className={`card-detail theme-${theme}`}>
           <div className="card-detail-header">
             <h2 className="card-detail-title">Error</h2>
             <button

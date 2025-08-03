@@ -10,6 +10,7 @@ import TwoColumnLayout from '@components/TwoColumnLayout';
 import Pagination from '@components/Pagination';
 
 import { useSearchQuery } from '@hooks/useSearchQuery';
+import { useTheme } from '@hooks/useTheme';
 import { getPokemonsPaginatedList } from '@services/pokemonService';
 
 import type { BasePokemon, PaginatedPokemonListResponse } from '@types';
@@ -17,6 +18,7 @@ import type { BasePokemon, PaginatedPokemonListResponse } from '@types';
 import './index.css';
 
 const CardsPage = () => {
+  const { theme } = useTheme();
   const [paginationData, setPaginationData] =
     useState<PaginatedPokemonListResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,13 +103,22 @@ const CardsPage = () => {
   }, [detailsId, paginationData]);
 
   return (
-    <div className="home-page">
+    <div className={`cards-page theme-${theme}`}>
       <SearchBar onSearch={handleSearch} searchValue={searchQuery} />
       <div className="main">
         {isLoading && <Spinner />}
         {hasError && <ErrorMessage message={errorMessage} />}
         {!isLoading && !hasError && paginationData && (
           <>
+            {paginationData.totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={paginationData.totalPages}
+                onPageChange={handlePageChange}
+                hasNext={paginationData.hasNext}
+                hasPrev={paginationData.hasPrev}
+              />
+            )}
             <TwoColumnLayout
               isDetailOpen={!!selectedPokemon}
               leftColumn={
@@ -125,15 +136,6 @@ const CardsPage = () => {
                 )
               }
             />
-            {paginationData.totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={paginationData.totalPages}
-                onPageChange={handlePageChange}
-                hasNext={paginationData.hasNext}
-                hasPrev={paginationData.hasPrev}
-              />
-            )}
           </>
         )}
       </div>

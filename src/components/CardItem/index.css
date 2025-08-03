@@ -5,6 +5,51 @@
   border-radius: 0.75rem;
   overflow: hidden;
   cursor: pointer;
+  position: relative;
+}
+
+.card-checkbox {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s ease;
+}
+
+.card-checkbox:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.checkbox-input:focus + .pokeball-icon {
+  filter: drop-shadow(0 0 0 2px var(--pokemon-blue));
+}
+
+.pokeball-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: filter 0.2s ease;
+  opacity: 0.08;
+}
+
+.pokeball-icon.checked,
+.checkbox-input:checked + .pokeball-icon {
+  opacity: 1;
 }
 
 .card-header {
@@ -13,6 +58,10 @@
   padding: 1rem;
   background: var(--pokemon-red);
   gap: 1rem;
+}
+
+.theme-dark .card-header {
+  background: var(--dark-red);
 }
 
 .card-image {
@@ -91,6 +140,18 @@
   .card-image-placeholder {
     font-size: 2.5rem;
   }
+
+  .card-checkbox {
+    width: 1.8rem;
+    height: 1.8rem;
+    top: 0.4rem;
+    right: 0.4rem;
+  }
+
+  .pokeball-icon {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -116,6 +177,18 @@
   .card-image-placeholder {
     font-size: 2rem;
   }
+
+  .card-checkbox {
+    width: 1.6rem;
+    height: 1.6rem;
+    top: 0.3rem;
+    right: 0.3rem;
+  }
+
+  .pokeball-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -140,5 +213,17 @@
 
   .card-image-placeholder {
     font-size: 1.5rem;
+  }
+
+  .card-checkbox {
+    width: 1.4rem;
+    height: 1.4rem;
+    top: 0.25rem;
+    right: 0.25rem;
+  }
+
+  .pokeball-icon {
+    width: 1rem;
+    height: 1rem;
   }
 }

@@ -3,7 +3,11 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin: 20px 0;
+  padding: 20px 0;
+}
+
+.theme-dark .pagination {
+  background-color: var(--theme-dark-bg-primary);
 }
 
 .pagination-button {
@@ -14,8 +18,16 @@
   border-radius: 4px;
 }
 
+.theme-dark .pagination-button {
+  background: var(--theme-dark-bg-primary);
+}
+
 .pagination-button:hover:not(:disabled) {
   background: #f5f5f5;
+}
+
+.theme-dark .pagination-button:hover:not(:disabled) {
+  background: var(--pokemon-red);
 }
 
 .pagination-button:disabled {
@@ -24,10 +36,22 @@
   cursor: not-allowed;
 }
 
+.theme-dark .pagination-button:disabled {
+  background: var(--theme-dark-bg-primary);
+  color: #999;
+  cursor: not-allowed;
+}
+
 .pagination-button.active {
   background: var(--pokemon-blue);
   color: white;
-  border-color: var(--pokemon-blue);
+  border-color: var(--pokemon-red);
+}
+
+.theme-dark .pagination-button.active {
+  background: var(--dark-red);
+  color: white;
+  border-color: var(--pokemon-red);
 }
 
 .pagination-info {

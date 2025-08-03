@@ -110,6 +110,15 @@ const CardsPage = () => {
         {hasError && <ErrorMessage message={errorMessage} />}
         {!isLoading && !hasError && paginationData && (
           <>
+            {paginationData.totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={paginationData.totalPages}
+                onPageChange={handlePageChange}
+                hasNext={paginationData.hasNext}
+                hasPrev={paginationData.hasPrev}
+              />
+            )}
             <TwoColumnLayout
               isDetailOpen={!!selectedPokemon}
               leftColumn={
@@ -127,15 +136,6 @@ const CardsPage = () => {
                 )
               }
             />
-            {paginationData.totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={paginationData.totalPages}
-                onPageChange={handlePageChange}
-                hasNext={paginationData.hasNext}
-                hasPrev={paginationData.hasPrev}
-              />
-            )}
           </>
         )}
       </div>

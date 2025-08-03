@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { addSelectedItem, removeSelectedItem } from 'store/selectedItemsSlice';
 import type { BasePokemon } from '@types';
-import { ThemeContext } from 'contexts';
+import { useTheme } from '@hooks/useTheme';
 
 import './index.css';
 
@@ -18,7 +18,7 @@ const CardItem = ({ pokemon, onCardClick }: CardItemProps) => {
     state.selectedItems.selectedItems.some((item) => item.id === pokemon.id)
   );
   const { id, name, image } = pokemon;
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useTheme();
   const [hasImageError, setHasImageError] = useState(false);
 
   const handleImageError = () => {

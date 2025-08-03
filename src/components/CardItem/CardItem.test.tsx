@@ -1,39 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import selectedItemsReducer from 'store/selectedItemsSlice';
-import { ThemeContext } from 'contexts';
 import { mockPokemon } from '@mocks/pokemon';
+import { createTestStore, TestWrapper } from '@testUtils/testUtils';
 
 import CardItem from './index';
 
 const mockOnCardClick = vi.fn();
-
-const createTestStore = (preloadedState = {}) => {
-  return configureStore({
-    reducer: {
-      selectedItems: selectedItemsReducer,
-    },
-    preloadedState,
-  });
-};
-
-const TestWrapper = ({
-  children,
-  store = createTestStore(),
-  theme = 'light',
-}: {
-  children: React.ReactNode;
-  store?: ReturnType<typeof createTestStore>;
-  theme?: string;
-}) => (
-  <Provider store={store}>
-    <ThemeContext.Provider value={{ theme, setTheme: vi.fn() }}>
-      {children}
-    </ThemeContext.Provider>
-  </Provider>
-);
 
 describe('CardItem', () => {
   beforeEach(() => {

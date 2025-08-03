@@ -1,9 +1,9 @@
 import type { BasePokemon, PokemonSpecies } from '@types';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './index.css';
 import { fetchPokemonBySpecies } from '@api/fetchPokemonBySpecies';
 import Spinner from '@components/Spinner';
-import { ThemeContext } from 'contexts';
+import { useTheme } from '@hooks/useTheme';
 
 interface CardDetailProps {
   pokemon: BasePokemon;
@@ -16,7 +16,7 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [details, setDetails] = useState<PokemonSpecies | null>(null);
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useTheme();
 
   const { id, name, image, types, abilities, height, weight, stats } = pokemon;
 

@@ -18,7 +18,8 @@
       "@constants/*": ["constants/*"],
       "@utils/*": ["utils/*"],
       "@services/*": ["services/*"],
-      "@mocks/*": ["__tests__/mocks/*"]
+      "@mocks/*": ["__tests__/mocks/*"],
+      "@testUtils/*": ["__tests__/utils/*"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

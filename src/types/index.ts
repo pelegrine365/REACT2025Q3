@@ -62,8 +62,9 @@ export interface GithubUser {
   avatarURL: string;
   userURL: string;
 }
+export type Theme = 'light' | 'dark';
 
-export type ThemeContextType = {
-  theme: string;
-  setTheme: (theme: string) => void;
-};
+export interface ThemeContextType {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+}

@@ -1,11 +1,10 @@
-import { ThemeContext } from 'contexts';
-import { useContext } from 'react';
 import { THEME_DAY, THEME_NIGHT } from '@constants';
+import { useTheme } from '@hooks/useTheme';
 
 import './index.css';
 
 const ThemeButton = () => {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { theme, setTheme } = useTheme();
 
   const handleClick = () => {
     setTheme(theme === THEME_DAY ? THEME_NIGHT : THEME_DAY);

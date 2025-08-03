@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { ThemeContext } from 'contexts';
 
 import CardList from '@components/CardList';
 import ErrorMessage from '@components/ErrorMessage';
@@ -11,6 +10,7 @@ import TwoColumnLayout from '@components/TwoColumnLayout';
 import Pagination from '@components/Pagination';
 
 import { useSearchQuery } from '@hooks/useSearchQuery';
+import { useTheme } from '@hooks/useTheme';
 import { getPokemonsPaginatedList } from '@services/pokemonService';
 
 import type { BasePokemon, PaginatedPokemonListResponse } from '@types';
@@ -18,7 +18,7 @@ import type { BasePokemon, PaginatedPokemonListResponse } from '@types';
 import './index.css';
 
 const CardsPage = () => {
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useTheme();
   const [paginationData, setPaginationData] =
     useState<PaginatedPokemonListResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);

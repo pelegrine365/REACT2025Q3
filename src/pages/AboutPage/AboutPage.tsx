@@ -1,13 +1,12 @@
-import { useContext } from 'react';
 import { AUTHOR_GITHUB_NAME } from '@constants';
 import { useGithubUser } from '@hooks/useGithubUser';
 import Spinner from '@components/Spinner';
-import { ThemeContext } from 'contexts';
+import { useTheme } from '@hooks/useTheme';
 
 import './index.css';
 
 const About = () => {
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useTheme();
   const { avatarURL, userURL, isLoading, error } =
     useGithubUser(AUTHOR_GITHUB_NAME);
 

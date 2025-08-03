@@ -3,6 +3,7 @@ import { Outlet, useMatches } from 'react-router';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { ThemeContext } from 'contexts';
+import type { Theme } from '@types';
 
 import Navigation from '@components/Navigation';
 import ThemeButton from '@components/ThemeButton';
@@ -16,7 +17,7 @@ type RouteHandle = {
 };
 
 const App = () => {
-  const [theme, setTheme] = useState(THEME_DAY);
+  const [theme, setTheme] = useState<Theme>(THEME_DAY);
 
   const matches = useMatches();
   const matchWithTitle = [...matches]

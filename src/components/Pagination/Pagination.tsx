@@ -1,8 +1,7 @@
 import { getVisiblePages } from '@utils/getVisiblePages';
+import { useTheme } from '@hooks/useTheme';
 
 import './index.css';
-import { useContext } from 'react';
-import { ThemeContext } from 'contexts';
 
 interface PaginationProps {
   currentPage: number;
@@ -20,7 +19,7 @@ const Pagination = ({
   hasPrev,
 }: PaginationProps) => {
   const visiblePages = getVisiblePages(currentPage, totalPages);
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useTheme();
 
   return (
     <div className={`pagination theme-${theme}`}>

@@ -2,10 +2,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ThemeContext } from 'contexts';
 import ThemeButton from './ThemeButton';
+import type { Theme } from '@types';
 
 const mockSetTheme = vi.fn();
 
-const renderWithThemeContext = (theme: string) => {
+const renderWithThemeContext = (theme: Theme) => {
   return render(
     <ThemeContext.Provider value={{ theme, setTheme: mockSetTheme }}>
       <ThemeButton />

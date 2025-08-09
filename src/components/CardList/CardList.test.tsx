@@ -1,7 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { mockPokemonList } from '@mocks/pokemon';
-import { createTestStore, TestWrapper } from '@testUtils/testUtils';
+import { createTestStore } from '@testUtils/testStoreUtils';
+import { TestWrapper } from '@testUtils/testUtils';
 
 import CardList from './index';
 

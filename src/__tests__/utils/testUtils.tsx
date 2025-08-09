@@ -1,19 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
 import { vi } from 'vitest';
-import selectedItemsReducer from 'store/selectedItemsSlice';
 import { ThemeContext } from 'contexts';
 import type { Theme } from '@types';
-
-export const createTestStore = (preloadedState = {}) => {
-  return configureStore({
-    reducer: {
-      selectedItems: selectedItemsReducer,
-    },
-    preloadedState,
-  });
-};
+import { createTestStore } from './testStoreUtils';
 
 export const TestWrapper = ({
   children,

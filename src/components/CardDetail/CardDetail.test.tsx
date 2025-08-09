@@ -1,37 +1,78 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import CardDetail from '@components/CardDetail';
 
-import type { BasePokemon } from '@types';
-
+import type { BasePokemon, PokemonSpecies } from '@types';
+import { useGetPokemonSpeciesQuery } from '@api/pokemonApi/pokemonApi';
 import { mockPokemon, mockPokemonSpecies } from '@mocks/pokemon';
 
-vi.mock('@api/fetchPokemonBySpecies', () => ({
-  fetchPokemonBySpecies: vi.fn(),
+vi.mock('@api/pokemonApi/pokemonApi', () => ({
+  useGetPokemonSpeciesQuery: vi.fn(),
 }));
 
-import { fetchPokemonBySpecies } from '@api/fetchPokemonBySpecies';
-const mockFetchPokemonBySpecies = vi.mocked(fetchPokemonBySpecies);
+interface MockQueryResult {
+  data?: PokemonSpecies;
+  isLoading: boolean;
+  error?: { data?: { message: string } } | Record<string, unknown>;
+  isError: boolean;
+}
+
+const mockUseGetPokemonSpeciesQuery = vi.mocked(useGetPokemonSpeciesQuery);
+
+const createMockQueryResult = (partial: MockQueryResult) =>
+  partial as unknown as ReturnType<typeof useGetPokemonSpeciesQuery>;
+
+const createMockStore = () =>
+  configureStore({
+    reducer: {
+      test: (state = {}) => state,
+    },
+  });
 
 describe('CardDetail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
+  const renderWithProvider = (component: React.ReactElement) => {
+    const store = createMockStore();
+    return render(<Provider store={store}>{component}</Provider>);
+  };
+
   it('shows spinner while loading pokemon details', async () => {
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockImplementation(() => new Promise(() => {}));
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: undefined,
+        isLoading: true,
+        error: undefined,
+        isError: false,
+      })
+    );
 
-    render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
+    renderWithProvider(
+      <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
+    );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   it('renders pokemon details correctly after loading', async () => {
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockResolvedValue(mockPokemonSpecies);
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: mockPokemonSpecies,
+        isLoading: false,
+        error: undefined,
+        isError: false,
+      })
+    );
 
-    render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
+    renderWithProvider(
+      <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
+    );
 
     await waitFor(() => {
       expect(
@@ -53,9 +94,18 @@ describe('CardDetail', () => {
 
   it('renders pokemon image with correct attributes', async () => {
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockResolvedValue(mockPokemonSpecies);
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: mockPokemonSpecies,
+        isLoading: false,
+        error: undefined,
+        isError: false,
+      })
+    );
 
-    render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
+    renderWithProvider(
+      <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
+    );
 
     await waitFor(() => {
       const image = screen.getByAltText(mockPokemon.name);
@@ -66,9 +116,18 @@ describe('CardDetail', () => {
 
   it('calls onClose when close button is clicked', async () => {
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockResolvedValue(mockPokemonSpecies);
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: mockPokemonSpecies,
+        isLoading: false,
+        error: undefined,
+        isError: false,
+      })
+    );
 
-    render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
+    renderWithProvider(
+      <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
+    );
 
     await waitFor(() => {
       expect(
@@ -88,9 +147,16 @@ describe('CardDetail', () => {
       types: ['fire', 'flying', 'dragon'],
     };
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockResolvedValue(mockPokemonSpecies);
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: mockPokemonSpecies,
+        isLoading: false,
+        error: undefined,
+        isError: false,
+      })
+    );
 
-    render(
+    renderWithProvider(
       <CardDetail pokemon={pokemonWithMultipleTypes} onClose={mockOnClose} />
     );
 
@@ -104,9 +170,18 @@ describe('CardDetail', () => {
 
   it('shows error message when species fetch fails', async () => {
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockRejectedValue(new Error('Species not found'));
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: undefined,
+        isLoading: false,
+        error: { data: { message: 'Species not found' } },
+        isError: true,
+      })
+    );
 
-    render(<CardDetail pokemon={mockPokemon} onClose={mockOnClose} />);
+    renderWithProvider(
+      <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Error')).toBeInTheDocument();
@@ -115,25 +190,29 @@ describe('CardDetail', () => {
     expect(screen.getByText('Species not found')).toBeInTheDocument();
   });
 
-  it('refetches data when pokemon changes', async () => {
+  it('shows default error message when error has no data', async () => {
     const mockOnClose = vi.fn();
-    mockFetchPokemonBySpecies.mockResolvedValue(mockPokemonSpecies);
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: undefined,
+        isLoading: false,
+        error: {},
+        isError: true,
+      })
+    );
 
-    const { rerender } = render(
+    renderWithProvider(
       <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
     );
 
     await waitFor(() => {
-      expect(mockFetchPokemonBySpecies).toHaveBeenCalledWith(mockPokemon.name);
+      expect(screen.getByText('Error')).toBeInTheDocument();
     });
 
-    const newPokemon = { ...mockPokemon, name: 'Charmander', id: 4 };
-    rerender(<CardDetail pokemon={newPokemon} onClose={mockOnClose} />);
-
-    await waitFor(() => {
-      expect(mockFetchPokemonBySpecies).toHaveBeenCalledWith(newPokemon.name);
-    });
-
-    expect(mockFetchPokemonBySpecies).toHaveBeenCalledTimes(2);
+    expect(
+      screen.getByText(
+        'Species not found! Try searching with a different name.'
+      )
+    ).toBeInTheDocument();
   });
 });

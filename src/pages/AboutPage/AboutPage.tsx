@@ -1,15 +1,22 @@
 import { AUTHOR_GITHUB_NAME } from '@constants';
-import { useGithubUser } from '@hooks/useGithubUser';
 import Spinner from '@components/Spinner';
 import { useTheme } from '@hooks/useTheme';
+import { useGetUserQuery } from '@api/githubApi';
 
 import './index.css';
 
 const About = () => {
   const { theme } = useTheme();
-  const { avatarURL, userURL, isLoading, error } =
-    useGithubUser(AUTHOR_GITHUB_NAME);
 
+  const {
+    data: { avatarURL, userURL } = {},
+    isLoading,
+    isError,
+  } = useGetUserQuery(AUTHOR_GITHUB_NAME, {
+    refetchOnFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMountOrArgChange: false,
+  });
   return (
     <div className={`about-page theme-${theme}`}>
       <div className="main">
@@ -26,7 +33,7 @@ const About = () => {
               </p>
             </div>
 
-            {isLoading || error ? (
+            {isLoading ? (
               <Spinner />
             ) : (
               <>
@@ -35,11 +42,13 @@ const About = () => {
                   <div className="about__author">
                     <p className="about__author-description">
                       <span>Created by:</span>
-                      <img
-                        className="about__avatar"
-                        src={avatarURL}
-                        alt="avatar"
-                      />
+                      {!isError && (
+                        <img
+                          className="about__avatar"
+                          src={avatarURL}
+                          alt="avatar"
+                        />
+                      )}
                       <strong>{AUTHOR_GITHUB_NAME}</strong>
                     </p>
 

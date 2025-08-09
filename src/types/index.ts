@@ -62,6 +62,13 @@ export interface GithubUser {
   avatarURL: string;
   userURL: string;
 }
+
+export interface GithubRawUser {
+  name: string;
+  avatar_url: string;
+  html_url: string;
+}
+
 export type Theme = 'light' | 'dark';
 
 export interface ThemeContextType {

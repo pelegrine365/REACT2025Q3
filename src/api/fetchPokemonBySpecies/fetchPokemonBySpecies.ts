@@ -1,5 +1,16 @@
 import { API_BASE_URL } from '@constants';
-import type { FlavorTextEntry, PokemonSpecies } from '@types';
+import type { PokemonSpecies } from '@types';
+
+export interface NamedAPIResource {
+  name: string;
+  url: string;
+}
+
+export interface FlavorTextEntry {
+  flavor_text: string;
+  language: NamedAPIResource;
+  version: NamedAPIResource;
+}
 
 export async function fetchPokemonBySpecies(
   name: string

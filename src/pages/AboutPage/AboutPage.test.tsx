@@ -1,85 +1,124 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import { AUTHOR_GITHUB_NAME } from '@constants';
-import { useGithubUser } from '@hooks/useGithubUser';
+import { githubApi } from '@api/githubApi';
+import type { GithubRawUser } from '@types';
+import { mockRawGithubUserResponse } from '@mocks/github';
 
 import AboutPage from './AboutPage';
 
-vi.mock('@hooks/useGithubUser');
+const mockFetch = vi.fn();
+Object.defineProperty(globalThis, 'fetch', {
+  value: mockFetch,
+  writable: true,
+});
+
+const createMockResponse = (
+  data: GithubRawUser | { message: string },
+  ok = true,
+  status = 200
+) => {
+  const response = {
+    ok,
+    status,
+    statusText: ok ? 'OK' : 'Error',
+    headers: new Headers({ 'content-type': 'application/json' }),
+    json: vi.fn().mockResolvedValue(data),
+    text: vi.fn().mockResolvedValue(JSON.stringify(data)),
+    clone: vi.fn().mockReturnValue({
+      ok,
+      status,
+      statusText: ok ? 'OK' : 'Error',
+      headers: new Headers({ 'content-type': 'application/json' }),
+      json: vi.fn().mockResolvedValue(data),
+      text: vi.fn().mockResolvedValue(JSON.stringify(data)),
+    }),
+  };
+  return Promise.resolve(response as unknown as Response);
+};
+
+const createWrapper = () => {
+  const store = configureStore({
+    reducer: {
+      [githubApi.reducerPath]: githubApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(githubApi.middleware),
+  });
+
+  const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+    <Provider store={store}>{children}</Provider>
+  );
+
+  return TestWrapper;
+};
+
 describe('AboutPage', () => {
-  const mockUseGithubUser = vi.mocked(useGithubUser);
-
-  const MOCK_AVATAR_URL = 'https://test.com/avatar';
-  const MOCK_USER_URL = 'https://test.com/user';
-  const MOCK_AUTHOR_AVATAR_URL =
-    'https://avatars.githubusercontent.com/u/pelegrine365';
-  const MOCK_AUTHOR_USER_URL = 'https://github.com/pelegrine365';
-
   const renderAboutPage = (
-    mockData: Partial<ReturnType<typeof useGithubUser>> = {}
+    mockResponse?: GithubRawUser | { message: string },
+    shouldError = false
   ) => {
-    const defaultMockData = {
-      avatarURL: MOCK_AVATAR_URL,
-      userURL: MOCK_USER_URL,
-      isLoading: false,
-      error: null,
-      ...mockData,
-    };
+    if (shouldError) {
+      mockFetch.mockRejectedValueOnce(new Error('Network error'));
+    } else if (mockResponse !== undefined) {
+      mockFetch.mockReturnValueOnce(createMockResponse(mockResponse));
+    }
 
-    mockUseGithubUser.mockReturnValue(defaultMockData);
-    return render(<AboutPage />);
+    const Wrapper = createWrapper();
+    return render(<AboutPage />, { wrapper: Wrapper });
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockFetch.mockClear();
+    githubApi.util.resetApiState();
   });
 
-  it('should show Spinner when loading', () => {
-    renderAboutPage({
-      avatarURL: '',
-      userURL: '',
-      isLoading: true,
-    });
+  it('should show Spinner when loading', async () => {
+    const pendingPromise = new Promise(() => {});
+    mockFetch.mockReturnValueOnce(pendingPromise as unknown as Response);
+
+    renderAboutPage();
 
     expect(screen.getByRole('status')).toBeInTheDocument();
     expect(screen.queryByText(/created by:/i)).not.toBeInTheDocument();
   });
 
-  it('should show Spinner when there is an error', () => {
-    renderAboutPage({
-      avatarURL: '',
-      userURL: '',
-      error: 'API Error',
-    });
+  it('should show Spinner when there is an error', async () => {
+    renderAboutPage(undefined, true);
 
     expect(screen.getByRole('status')).toBeInTheDocument();
     expect(screen.queryByText(/created by:/i)).not.toBeInTheDocument();
   });
 
-  it('should display author info with avatar and github link when data is loaded', () => {
-    renderAboutPage({
-      avatarURL: MOCK_AUTHOR_AVATAR_URL,
-      userURL: MOCK_AUTHOR_USER_URL,
-    });
+  it('should display author info with avatar and github link when data is loaded', async () => {
+    renderAboutPage(mockRawGithubUserResponse);
+
+    await screen.findByText(/created by:/i);
 
     expect(screen.getByText(/created by:/i)).toBeInTheDocument();
     expect(screen.getByText(AUTHOR_GITHUB_NAME)).toBeInTheDocument();
 
     const avatar = screen.getByAltText('avatar');
     expect(avatar).toBeInTheDocument();
-    expect(avatar).toHaveAttribute('src', MOCK_AUTHOR_AVATAR_URL);
+    expect(avatar).toHaveAttribute('src', mockRawGithubUserResponse.avatar_url);
 
     const githubLink = screen.getByRole('link', {
       name: /view github profile/i,
     });
     expect(githubLink).toBeInTheDocument();
-    expect(githubLink).toHaveAttribute('href', MOCK_AUTHOR_USER_URL);
+    expect(githubLink).toHaveAttribute(
+      'href',
+      mockRawGithubUserResponse.html_url
+    );
     expect(githubLink).toHaveAttribute('target', '_blank');
     expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('should render education section with RS School link', () => {
-    renderAboutPage();
+    renderAboutPage(mockRawGithubUserResponse);
 
     expect(
       screen.getByRole('heading', { name: /education/i })
@@ -102,7 +141,7 @@ describe('AboutPage', () => {
   });
 
   it('should render technologies section with all tech items', () => {
-    renderAboutPage();
+    renderAboutPage(mockRawGithubUserResponse);
 
     expect(
       screen.getByRole('heading', { name: /technologies used/i })
@@ -117,7 +156,7 @@ describe('AboutPage', () => {
   });
 
   it('should render features section with all feature items', () => {
-    renderAboutPage();
+    renderAboutPage(mockRawGithubUserResponse);
 
     expect(
       screen.getByRole('heading', { name: /features/i })
@@ -133,15 +172,20 @@ describe('AboutPage', () => {
     expect(screen.getByText('Comprehensive test coverage')).toBeInTheDocument();
   });
 
-  it('calls useGithubUser hook with correct author name', () => {
-    renderAboutPage();
+  it('should make API call to fetch user data', async () => {
+    renderAboutPage(mockRawGithubUserResponse);
 
-    expect(mockUseGithubUser).toHaveBeenCalledWith(AUTHOR_GITHUB_NAME);
-    expect(mockUseGithubUser).toHaveBeenCalledTimes(1);
+    await screen.findByText(/created by:/i);
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: `https://api.github.com/users/${AUTHOR_GITHUB_NAME}`,
+      })
+    );
   });
 
   it('has correct CSS classes and structure', () => {
-    renderAboutPage();
+    renderAboutPage(mockRawGithubUserResponse);
 
     expect(document.querySelector('.about-page')).toBeInTheDocument();
     expect(document.querySelector('.about__container')).toBeInTheDocument();

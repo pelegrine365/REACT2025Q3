@@ -8,6 +8,7 @@ export const MAX_POKEMON_ID = 900;
 export const AUTHOR_GITHUB_NAME = 'pelegrine365';
 
 export const API_BASE_URL = 'https://pokeapi.co/api/v2';
+export const GITHUB_API_BASE_URL = 'https://api.github.com/';
 
 export const THEME_DAY: Theme = 'light';
 export const THEME_NIGHT: Theme = 'dark';

@@ -1,9 +1,11 @@
-import type { BasePokemon, PokemonSpecies } from '@types';
+import type { BasePokemon } from '@types';
 import { useEffect, useState } from 'react';
-import './index.css';
-import { fetchPokemonBySpecies } from '@api/fetchPokemonBySpecies';
 import Spinner from '@components/Spinner';
+import RefreshButton from '@components/RefreshButton';
 import { useTheme } from '@hooks/useTheme';
+import { useGetPokemonSpeciesQuery } from '@api/pokemonApi/pokemonApi';
+
+import './index.css';
 
 interface CardDetailProps {
   pokemon: BasePokemon;
@@ -12,13 +14,19 @@ interface CardDetailProps {
 
 const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
   const [hasImageError, setHasImageError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [details, setDetails] = useState<PokemonSpecies | null>(null);
   const { theme } = useTheme();
 
-  const { id, name, image, types, abilities, height, weight, stats } = pokemon;
+  const { name, id, image, types, abilities, height, weight, stats } = pokemon;
+
+  const {
+    data: details,
+    isLoading,
+    error,
+    isError,
+    refetch,
+  } = useGetPokemonSpeciesQuery(name, {
+    skip: !name,
+  });
 
   const shouldShowFallback = hasImageError || !image || image.trim() === '';
 
@@ -37,40 +45,15 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    setDetails(null);
-    setHasError(false);
-    setErrorMessage('');
-    setHasImageError(false);
-
-    fetchPokemonDetails(name);
-  }, [name]);
-
-  const fetchPokemonDetails = async (name: string) => {
-    setIsLoading(true);
-    setHasError(false);
-
-    try {
-      const details = await fetchPokemonBySpecies(name);
-      setDetails(details);
-    } catch (error: unknown) {
-      let message = 'Species not found! Try searching with a different name.';
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      setDetails(null);
-      setHasError(true);
-      setErrorMessage(message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const errorMessage = isError
+    ? (error as { data?: { message?: string } })?.data?.message ||
+      'Species not found! Try searching with a different name.'
+    : '';
 
   return (
     <>
       {isLoading && <Spinner />}
-      {!isLoading && hasError && (
+      {!isLoading && isError && (
         <div className={`card-detail theme-${theme}`}>
           <div className="card-detail-header">
             <h2 className="card-detail-title">Error</h2>
@@ -85,23 +68,27 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
           </div>
           <div className="card-detail-content">
             <div className="error-message">{errorMessage}</div>
+            <RefreshButton onClick={() => refetch()} />
           </div>
         </div>
       )}
-      {!isLoading && !hasError && (
+      {!isLoading && !isError && (
         <div className="card-detail">
           <div className="card-detail-header">
             <h2 className="card-detail-title">
               {name?.toUpperCase() || 'UNKNOWN'}
             </h2>
-            <button
-              className="card-detail-close"
-              onClick={onClose}
-              aria-label="Close pokemon details"
-              title="Close (Esc)"
-            >
-              ✕
-            </button>
+            <div className="card-detail-actions">
+              <RefreshButton onClick={() => refetch()} />
+              <button
+                className="card-detail-close"
+                onClick={onClose}
+                aria-label="Close pokemon details"
+                title="Close (Esc)"
+              >
+                ✕
+              </button>
+            </div>
           </div>
           <div className="card-detail-content">
             <div className="card-detail-image">

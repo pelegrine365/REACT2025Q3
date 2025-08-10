@@ -1,6 +1,7 @@
 import type { BasePokemon } from '@types';
 import { useEffect, useState } from 'react';
 import Spinner from '@components/Spinner';
+import RefreshButton from '@components/RefreshButton';
 import { useTheme } from '@hooks/useTheme';
 import { useGetPokemonSpeciesQuery } from '@api/pokemonApi/pokemonApi';
 
@@ -22,6 +23,7 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
     isLoading,
     error,
     isError,
+    refetch,
   } = useGetPokemonSpeciesQuery(name, {
     skip: !name,
   });
@@ -66,6 +68,7 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
           </div>
           <div className="card-detail-content">
             <div className="error-message">{errorMessage}</div>
+            <RefreshButton onClick={() => refetch()} />
           </div>
         </div>
       )}
@@ -75,14 +78,17 @@ const CardDetail = ({ pokemon, onClose }: CardDetailProps) => {
             <h2 className="card-detail-title">
               {name?.toUpperCase() || 'UNKNOWN'}
             </h2>
-            <button
-              className="card-detail-close"
-              onClick={onClose}
-              aria-label="Close pokemon details"
-              title="Close (Esc)"
-            >
-              ✕
-            </button>
+            <div className="card-detail-actions">
+              <RefreshButton onClick={() => refetch()} />
+              <button
+                className="card-detail-close"
+                onClick={onClose}
+                aria-label="Close pokemon details"
+                title="Close (Esc)"
+              >
+                ✕
+              </button>
+            </div>
           </div>
           <div className="card-detail-content">
             <div className="card-detail-image">

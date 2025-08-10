@@ -23,6 +23,12 @@
   border-bottom: 2px solid var(--pokemon-red);
 }
 
+.card-detail-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .card-detail-title {
   font-size: 1.4rem;
   font-weight: 700;

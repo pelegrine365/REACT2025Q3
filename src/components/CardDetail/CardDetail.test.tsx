@@ -17,6 +17,7 @@ interface MockQueryResult {
   isLoading: boolean;
   error?: { data?: { message: string } } | Record<string, unknown>;
   isError: boolean;
+  refetch?: () => void;
 }
 
 const mockUseGetPokemonSpeciesQuery = vi.mocked(useGetPokemonSpeciesQuery);
@@ -135,7 +136,9 @@ describe('CardDetail', () => {
       ).toBeInTheDocument();
     });
 
-    const closeButton = screen.getByRole('button');
+    const closeButton = screen.getByRole('button', {
+      name: /close pokemon details/i,
+    });
     fireEvent.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledOnce();
@@ -214,5 +217,63 @@ describe('CardDetail', () => {
         'Species not found! Try searching with a different name.'
       )
     ).toBeInTheDocument();
+  });
+
+  it('calls refetch when refresh button is clicked', async () => {
+    const mockRefetch = vi.fn();
+    const mockOnClose = vi.fn();
+
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: mockPokemonSpecies,
+        isLoading: false,
+        error: undefined,
+        isError: false,
+        refetch: mockRefetch,
+      })
+    );
+
+    renderWithProvider(
+      <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(mockPokemon.name.toUpperCase())
+      ).toBeInTheDocument();
+    });
+
+    const refreshButton = screen.getByRole('button', { name: 'Refetch' });
+    fireEvent.click(refreshButton);
+
+    expect(mockRefetch).toHaveBeenCalledOnce();
+  });
+
+  it('calls refetch when try again button is clicked in error state', async () => {
+    const mockRefetch = vi.fn();
+    const mockOnClose = vi.fn();
+
+    mockUseGetPokemonSpeciesQuery.mockReturnValue(
+      createMockQueryResult({
+        data: undefined,
+        isLoading: false,
+        error: { data: { message: 'Network error' } },
+        isError: true,
+        refetch: mockRefetch,
+      })
+    );
+
+    renderWithProvider(
+      <CardDetail pokemon={mockPokemon} onClose={mockOnClose} />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Network error')).toBeInTheDocument();
+    });
+
+    const tryAgainButton = screen.getByRole('button', { name: 'Refetch' });
+    fireEvent.click(tryAgainButton);
+
+    expect(mockRefetch).toHaveBeenCalledOnce();
   });
 });

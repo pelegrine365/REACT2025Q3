@@ -1,1 +1,5 @@
-export { pokemonApi } from './pokemonApi';
+export {
+  pokemonApi,
+  useGetPokemonSpeciesQuery,
+  useGetPokemonQuery,
+} from './pokemonApi';

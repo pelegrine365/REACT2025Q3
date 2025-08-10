@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_BASE_URL } from '@constants';
-import type { PokemonSpecies } from '@types';
+import type { PokemonSpecies, BasePokemon, PokemonApiResponse } from '@types';
 
 interface SpeciesApiResponse {
   id: number;
@@ -51,7 +51,28 @@ export const pokemonApi = createApi({
         };
       },
     }),
+
+    getPokemon: builder.query<BasePokemon, string | number>({
+      query: (nameOrId) => `pokemon/${nameOrId.toString().toLowerCase()}`,
+      providesTags: (_result, _error, nameOrId) => [
+        { type: 'Pokemon', id: nameOrId },
+        { type: 'Pokemon', id: 'LIST' },
+      ],
+      transformResponse: (response: PokemonApiResponse): BasePokemon => ({
+        id: response.id,
+        name: response.name,
+        image: response.sprites.other['official-artwork'].front_default || '',
+        types: response.types.map((type) => type.type.name),
+        abilities: response.abilities.map((ability) => ability.ability.name),
+        height: response.height,
+        weight: response.weight,
+        stats: response.stats.map((stat) => ({
+          name: stat.stat.name,
+          value: stat.base_stat,
+        })),
+      }),
+    }),
   }),
 });
 
-export const { useGetPokemonSpeciesQuery } = pokemonApi;
+export const { useGetPokemonSpeciesQuery, useGetPokemonQuery } = pokemonApi;

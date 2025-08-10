@@ -1,1 +1,0 @@
-export { fetchPokemonsByIds } from './fetchPokemonList';

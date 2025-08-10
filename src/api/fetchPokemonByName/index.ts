@@ -1,1 +1,0 @@
-export { fetchPokemonByName } from './fetchPokemonByName';

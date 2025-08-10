@@ -8,11 +8,13 @@ import Spinner from '@components/Spinner';
 import CardDetail from '@components/CardDetail';
 import TwoColumnLayout from '@components/TwoColumnLayout';
 import Pagination from '@components/Pagination';
+import RefreshButton from '@components/RefreshButton';
 
 import { useSearchQuery } from '@hooks/useSearchQuery';
 import { useTheme } from '@hooks/useTheme';
-import { useGetPokemonQuery } from '@api/pokemonApi';
+import { useGetPokemonQuery, pokemonApi } from '@api/pokemonApi';
 import { usePokemonList } from '@hooks/usePokemonList';
+import { useDispatch } from 'react-redux';
 
 import { POKEMONS_PER_REQUEST, MAX_POKEMON_ID } from '@constants';
 import { createPokemonIdsRange } from '@utils/createPokemonIdsRange';
@@ -23,6 +25,7 @@ import './index.css';
 
 const CardsPage = () => {
   const { theme } = useTheme();
+  const dispatch = useDispatch();
   const [selectedPokemon, setSelectedPokemon] = useState<BasePokemon | null>(
     null
   );
@@ -40,29 +43,34 @@ const CardsPage = () => {
     return createPokemonIdsRange(currentPage);
   }, [currentPage, isSearchMode]);
 
-  const searchResult = useGetPokemonQuery(searchQuery, {
+  const {
+    data: searchData,
+    isLoading: searchIsLoading,
+    error: searchError,
+    refetch: searchRefetch,
+  } = useGetPokemonQuery(searchQuery, {
     skip: !isSearchMode,
   });
 
   const pokemonListResult = usePokemonList(pokemonIds, isSearchMode);
 
   const results: BasePokemon[] = useMemo(() => {
-    if (isSearchMode && searchResult.data) {
-      return [searchResult.data];
+    if (isSearchMode && searchData) {
+      return [searchData];
     }
     return pokemonListResult.data;
-  }, [isSearchMode, searchResult.data, pokemonListResult.data]);
+  }, [isSearchMode, searchData, pokemonListResult.data]);
 
   const isLoading = isSearchMode
-    ? searchResult.isLoading
+    ? searchIsLoading
     : pokemonListResult.isLoading;
 
-  const error = isSearchMode ? searchResult.error : pokemonListResult.error;
+  const error = isSearchMode ? searchError : pokemonListResult.error;
 
   const paginationData = useMemo(() => {
     if (isSearchMode) {
       return {
-        totalCount: searchResult.data ? 1 : 0,
+        totalCount: searchData ? 1 : 0,
         hasNext: false,
         hasPrev: false,
         currentPage: 1,
@@ -82,7 +90,7 @@ const CardsPage = () => {
       currentPage,
       totalPages,
     };
-  }, [isSearchMode, searchResult.data, currentPage]);
+  }, [isSearchMode, searchData, currentPage]);
 
   const errorMessage = useMemo(() => {
     if (!error) return '';
@@ -132,6 +140,19 @@ const CardsPage = () => {
     setSearchParams(params);
   };
 
+  const handleRefetch = () => {
+    if (isSearchMode) {
+      searchRefetch();
+    } else {
+      dispatch(
+        pokemonApi.util.invalidateTags([
+          { type: 'Pokemon', id: 'LIST' },
+          ...pokemonIds.map((id) => ({ type: 'Pokemon' as const, id })),
+        ])
+      );
+    }
+  };
+
   useEffect(() => {
     if (detailsId && results.length > 0) {
       const pokemon = results.find((p) => p.id === parseInt(detailsId, 10));
@@ -144,6 +165,7 @@ const CardsPage = () => {
   return (
     <div className={`cards-page theme-${theme}`}>
       <SearchBar onSearch={handleSearch} searchValue={searchQuery} />
+      <RefreshButton onClick={handleRefetch} disabled={isLoading} />
       <div className="main">
         {isLoading && <Spinner />}
         {error && !isLoading && <ErrorMessage message={errorMessage} />}

@@ -1,1 +1,0 @@
-export { fetchDefaultPokemonList } from './fetchDefaultPokemonList';
